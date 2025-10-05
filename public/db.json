@@ -1,0 +1,132 @@
+[
+  {
+    "id": 1,
+    "title": "Fender JazzBass",
+    "img": "/catalog-photos/fender-bass.png",
+    "description": "The Fender American Standard Jazz Bass has become the modern flagship model of Fender’s classic J-Bass line. Since its introduction to the Fender lineup in 1960, the Jazz Bass has played an imperative role in the development of over half a dozen genres, like funk, prog rock, and, of course, jazz fusion. The American Standard was first produced in 1989 and then again starting in 2008, the latter of which has a variety of updated appointments like a Custom Shop single-coil pickup and C-shaped neck profile.",
+    "catalog": [
+      {
+        "img": "/catalog-photos/FenderBass/bass1.png"
+      },
+      {
+        "img": "/catalog-photos/FenderBass/bass2.png"
+      },
+      {
+        "img": "/catalog-photos/FenderBass/bass3.png"
+      }
+    ]
+  },
+  {
+    "id": 2,
+    "title": "Tama Starclassic Performer",
+    "img": "/catalog-photos/Tama-Drum.png",
+    "description": "барабаны раковины все березы сделано в Японии синий индиго",
+    "catalog": [
+      {
+        "img": "/catalog-photos/TamaDrums/Tama1.png"
+      },
+      {
+        "img": "/catalog-photos/TamaDrums/Tama2.png"
+      },
+      {
+        "img": "/catalog-photos/TamaDrums/Tama3.png"
+      }
+    ]
+  },
+  {
+    "id": 3,
+    "title": "FENDER Telecaster",
+    "img": "/catalog-photos/fender-png.png",
+    "description": "Billy Sheehan’s legendary Attitude is reborn. Hand-crafted in Yamaha Music Craft, Attitude Limited 3 features Billy’s sound taken to a new level, with refined characteristics. Available in sensational Sonic Blue and Attitude classic Black.",
+    "catalog": [
+      {
+        "img": "/catalog-photos/FenderGuitar/Fender1.png"
+      },
+      {
+        "img": "/catalog-photos/FenderGuitar/Fender2.png"
+      }
+    ]
+  },
+  {
+    "id": 4,
+    "title": "YAMAHA Stage Custom Hip",
+    "img": "/catalog-photos/Yamaha-Drum.png",
+    "description": "The Stage Custom Hip provides big sound in a compact configuration. 100% birch shells with a small footprint make it ideal for tight spaces - the perfect solution for drummers on the go.",
+    "catalog": [
+      {
+        "img": "/catalog-photos/YamahaDrums/Yamaha1.png"
+      },
+      {
+        "img": "/catalog-photos/YamahaDrums/Yamaha2.png"
+      },
+      {
+        "img": "/catalog-photos/YamahaDrums/Yamaha3.png"
+      }
+    ]
+  },
+  {
+    "id": 5,
+    "title": "Fender JazzBass",
+    "img": "/catalog-photos/fender-bass.png",
+    "description": "The Fender American Standard Jazz Bass has become the modern flagship model of Fender’s classic J-Bass line. Since its introduction to the Fender lineup in 1960, the Jazz Bass has played an imperative role in the development of over half a dozen genres, like funk, prog rock, and, of course, jazz fusion. The American Standard was first produced in 1989 and then again starting in 2008, the latter of which has a variety of updated appointments like a Custom Shop single-coil pickup and C-shaped neck profile.",
+    "catalog": [
+      {
+        "img": "/catalog-photos/FenderBass/bass1.png"
+      },
+      {
+        "img": "/catalog-photos/FenderBass/bass2.png"
+      },
+      {
+        "img": "/catalog-photos/FenderBass/bass3.png"
+      }
+    ]
+  },
+  {
+    "id": 6,
+    "title": "Tama Starclassic Performer",
+    "img": "/catalog-photos/Tama-Drum.png",
+    "description": "барабаны раковины все березы сделано в Японии синий индиго",
+    "catalog": [
+      {
+        "img": "/catalog-photos/TamaDrums/Tama1.png"
+      },
+      {
+        "img": "/catalog-photos/TamaDrums/Tama2.png"
+      },
+      {
+        "img": "/catalog-photos/TamaDrums/Tama3.png"
+      }
+    ]
+  },
+  {
+    "id": 7,
+    "title": "FENDER Telecaster",
+    "img": "/catalog-photos/fender-png.png",
+    "description": "Billy Sheehan’s legendary Attitude is reborn. Hand-crafted in Yamaha Music Craft, Attitude Limited 3 features Billy’s sound taken to a new level, with refined characteristics. Available in sensational Sonic Blue and Attitude classic Black.",
+    "catalog": [
+      {
+        "img": "/catalog-photos/FenderGuitar/Fender1.png"
+      },
+      {
+        "img": "/catalog-photos/FenderGuitar/Fender2.png"
+      }
+    ]
+  },
+  {
+    "id": 8,
+    "title": "YAMAHA Stage Custom Hip",
+    "img": "/catalog-photos/Yamaha-Drum.png",
+    "description": "The Stage Custom Hip provides big sound in a compact configuration. 100% birch shells with a small footprint make it ideal for tight spaces - the perfect solution for drummers on the go.",
+    "catalog": [
+      {
+        "img": "/catalog-photos/YamahaDrums/Yamaha1.png"
+      },
+      {
+        "img": "/catalog-photos/YamahaDrums/Yamaha2.png"
+      },
+      {
+        "img": "/catalog-photos/YamahaDrums/Yamaha3.png"
+      }
+    ]
+  }
+]

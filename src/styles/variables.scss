@@ -1,0 +1,36 @@
+// breakpoints
+$xs: 0;
+$xs-max: 575px;
+$sm: 576px;
+$sm-max: 767px;
+$md: 768px;
+$md-max: 991px;
+$lg: 992px;
+$lg-max:1199px;
+$xl: 1200px;
+$xl-max:1399px;
+$xxl: 1400px;
+
+/* xs (<=543px) */
+@media (max-width: $xs-max) {
+	
+}
+
+/* sm (>=576 и <=767) */
+@media (min-width: $sm) and (max-width: $sm-max) {
+	
+}
+
+/* md (>=768 и <=991) */
+@media (min-width: $md) and (max-width: $md-max) {
+	
+}
+/* lg (>=992 и <=1199) */
+@media (min-width: $lg) and (max-width: $lg-max) {
+	
+}
+/* xl (>=1200) */
+@media (min-width: $xl) and (max-width: $xl-max) {
+}
+@media (min-width: $xxl) {
+}

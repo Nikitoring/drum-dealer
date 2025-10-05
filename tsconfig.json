@@ -1,0 +1,20 @@
+{
+  "extends": "@tsconfig/svelte/tsconfig.json",
+  "compilerOptions": {
+    "moduleResolution": "bundler", // or "node" depending on your setup
+    "allowJs": true,
+    "checkJs": true,
+    "strict": true,
+    "forceConsistentCasingInFileNames": true,
+    "resolveJsonModule": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "sourceMap": true,
+    "baseUrl": "./",
+    "paths": {
+      "$lib/*": ["src/lib/*"]
+    }
+  },
+  "include": ["src/**/*.d.ts", "src/**/*.ts", "src/**/*.js", "src/**/*.svelte"],
+  "exclude": ["node_modules"]
+}

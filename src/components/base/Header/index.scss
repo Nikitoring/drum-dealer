@@ -1,0 +1,204 @@
+@use '../../../styles/variables.scss';
+header {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+.logo-wrapper {
+  padding: 3.5rem 0 0 2.6rem;
+  z-index: 1000;
+}
+button.menu-logo {
+  border: none;
+  background: none;
+  cursor: pointer;
+  width: 7.6rem;
+  height: 7.6rem;
+  padding: 0;
+}
+.left-stick {
+  transition: all ease-in 250ms;
+}
+.active.left-stick {
+  transition: all ease-in 250ms;
+  transform: rotate(45deg) translate(2rem, -4rem);
+}
+.active.right-stick {
+  transform: rotate(-45deg) translate(-4rem, 1.4rem);
+  transition: 300ms all ease-out 250ms;
+}
+.right-stick {
+  transition: 300ms all ease-in-out 250ms;
+}
+.theme-state {
+  display: block;
+  margin-right: 13rem;
+  font-weight: 800;
+  font-size: 1.5rem;
+}
+.nav-show {
+  visibility: visible;
+  opacity: 1;
+}
+nav {
+  visibility: hidden;
+  opacity: 0;
+  display: flex;
+  justify-content: start;
+  margin-top: 17rem;
+  transition: 500ms all ease-in-out 500ms;
+  /* --background: rgba(255, 255, 255, 0.7); */
+}
+
+ul {
+  position: relative;
+  padding: 0;
+  margin: 0;
+  padding: 7rem 0 0 1.7rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  list-style: none;
+}
+
+li {
+  position: relative;
+  height: 100%;
+  margin-bottom: 1.5rem;
+  padding: 10px;
+  &.link-to {
+    background: conic-gradient(from -135deg, currentColor 90deg, #0000 0)
+        var(--p, -8px) 100%/16px 16px,
+      linear-gradient(90deg, currentColor calc(100% - 8px), #0000 0) bottom 6px
+        left 0 / var(--d, 0%) 3px;
+    background-repeat: no-repeat;
+    transition: 0.5s;
+    &:hover {
+      color: var(--tertiary-color);
+      --d: 100%;
+      --p: calc(100% + 8px);
+    }
+  }
+  &.to-home {
+    background: conic-gradient(from 45deg, currentColor 90deg, #0000 0)
+        var(--p, calc(100% + 8px)) 100%/16px 16px,
+      linear-gradient(-90deg, currentColor calc(100% - 8px), #0000 0) bottom 6px
+        right 0 / var(--d, 0%) 3px;
+    background-repeat: no-repeat;
+    transition: 0.5s;
+    &:hover {
+      --d: 100%;
+      --p: -8px;
+    }
+  }
+  &.active {
+    // text-decoration: underline;
+    & a {
+      color: var(--tertiary-color);
+    }
+  }
+}
+
+nav a {
+  display: flex;
+  height: 100%;
+  align-items: center;
+  color: var(--primary-color);
+  font-weight: 800;
+  @media (min-width: $xl) and (max-width: $xl-max) {
+    font-size: 5rem;
+  }
+  @media (min-width: $xxl) {
+    font-size: 6rem;
+  }
+  /* xs (<=543px) */
+  @media (max-width: $xs-max) {
+    font-size: 3rem;
+  }
+
+  /* sm (>=576 и <=767) */
+  @media (min-width: $sm) and (max-width: $sm-max) {
+    font-size: 4rem;
+  }
+
+  /* md (>=768 и <=991) */
+  @media (min-width: $md) and (max-width: $md-max) {
+    font-size: 3rem;
+  }
+
+  /* lg (>=992 и <=1199) */
+  @media (min-width: $lg) and (max-width: $lg-max) {
+    font-size: 5rem;
+  }
+  /* text-transform: uppercase; */
+  /* letter-spacing: 10%; */
+  text-decoration: none;
+  transition: color 0.2s linear;
+  &:hover {
+    color: var(--tertiary-color);
+  }
+}
+.modal-drawer {
+  z-index: 999;
+  width: 0;
+  height: 100%;
+  background: var(--accent-color);
+  color: var(--primary-color);
+  position: absolute;
+  left: 0;
+  top: 0;
+  box-shadow: 7px 3px 13px rgba(0, 0, 0, 0.25);
+}
+.modal-drawer-on {
+  // min-width: 25%;
+  width: 25%;
+  transition: 500ms all ease-in 50ms;
+  @media (min-width: $xl) and (max-width: $xl-max) {
+    width: 25%;
+  }
+  @media (min-width: $xxl) {
+    font-size: 6rem;
+  }
+  /* xs (<=543px) */
+  @media (max-width: $xs-max) {
+    width: 55%;
+  }
+
+  /* sm (>=576 и <=767) */
+  @media (min-width: $sm) and (max-width: $sm-max) {
+    width: 35%;
+  }
+
+  /* md (>=768 и <=991) */
+  @media (min-width: $md) and (max-width: $md-max) {
+    width: 35%;
+  }
+
+  /* lg (>=992 и <=1199) */
+  @media (min-width: $lg) and (max-width: $lg-max) {
+    width: 35%;
+  }
+}
+.modal-shadow {
+  transition: all 0.3s;
+  opacity: 0;
+  visibility: hidden;
+  transform-origin: center center;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 99;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  position: fixed;
+  background: rgba(138, 114, 113, 0.72);
+}
+.modal-shadow-on {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+}
