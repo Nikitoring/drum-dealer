@@ -914,6 +914,11 @@ svelte-preprocess@^6.0.3:
   resolved "https://registry.yarnpkg.com/svelte-preprocess/-/svelte-preprocess-6.0.3.tgz#fdc1f9dc41b6f22bf8b1f059e9f21eaaae181eeb"
   integrity sha512-PLG2k05qHdhmRG7zR/dyo5qKvakhm8IJ+hD2eFRQmMLHp7X3eJnjeupUtvuRpbNiF31RjVw45W+abDwHEmP5OA==
 
+svelte-routing@^2.13.0:
+  version "2.13.0"
+  resolved "https://registry.yarnpkg.com/svelte-routing/-/svelte-routing-2.13.0.tgz#d8215a55491e32203d4eaeda20b313dd257bdce7"
+  integrity sha512-/NTxqTwLc7Dq306hARJrH2HLXOBtKd7hu8nxgoFDlK0AC4SOKnzisiX/9m8Uksei1QAWtlAEdF91YphNM8iDMg==
+
 svelte@^4.0.0:
   version "4.2.20"
   resolved "https://registry.yarnpkg.com/svelte/-/svelte-4.2.20.tgz#31cae3e8f10ccdc6441fae8157c1e8da5965d228"

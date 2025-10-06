@@ -1,5 +1,8 @@
 <script>
-  import Header from "./components/base/Header/index.svelte";
+  import { Router } from 'svelte-routing';
+  import Header from './components/base/Header/index.svelte';
+
+  export let url = '';
 </script>
 
 <svelte:head>
@@ -7,11 +10,13 @@
 </svelte:head>
 
 <main>
-  <Header />
-  <section>
-    <div class="title-primary">DRUM</div>
-    <div class="red-square" />
-  </section>
+  <Router {url}>
+    <Header />
+    <section>
+      <div class="title-primary">DRUM</div>
+      <div class="red-square" />
+    </section>
+  </Router>
 </main>
 
 <style lang="scss">
@@ -29,7 +34,7 @@
     width: 100%;
     margin: 0 auto;
   }
-  @import "./styles/variables.scss";
+  @import './styles/variables.scss';
   section {
     display: flex;
     justify-content: start;
@@ -61,7 +66,7 @@
     &::before {
       z-index: 2;
       position: absolute;
-      content: " ";
+      content: ' ';
       width: 64rem;
       height: 60rem;
       background: url(drums.png) no-repeat center;
@@ -80,7 +85,7 @@
       }
     }
     &::after {
-      content: "DEALER";
+      content: 'DEALER';
       font-weight: 700;
       font-size: 14rem;
       color: var(--primary-color);
@@ -101,7 +106,7 @@
       }
       @media (min-width: $xxl) {
         margin-left: -5.8rem;
-        margin-top: 5.1rem;
+        margin-top: 5.3rem;
         font-size: 11rem;
         width: 48rem;
         height: 40rem;

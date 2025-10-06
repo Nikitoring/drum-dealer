@@ -1,18 +1,6 @@
 <script lang="ts">
-  import { fade } from 'svelte/transition';
-  // Заменяем устаревший импорт на новый
-  import { myState } from '../../../stores/main';
-  import { browser } from '$app/environment'; // Обратите внимание: это также могло измениться на '$app/environment'
-
-  // Используем $derived для реактивности вместо реактивных объявлений ($:)
-  $myState.path = page.url.pathname;
-
-  // Логика для обновления класса body
-  $effect(() => {
-    if (browser) {
-      document.body.classList.toggle('secondary', $myState.path === '/catalog');
-    }
-  });
+  import { onMount } from 'svelte';
+  import { Link } from 'svelte-routing';
 
   let isMenuShow = false;
 
@@ -23,6 +11,9 @@
   function closeMenu() {
     isMenuShow = false;
   }
+  let current_url = '';
+  let path = '';
+  onMount(() => (current_url = window.location.href));
 </script>
 
 <header>
@@ -74,30 +65,26 @@
     <div class={isMenuShow ? 'modal-drawer modal-drawer-on' : 'modal-drawer'}>
       <nav class={isMenuShow ? 'nav-show' : ''}>
         <ul>
-          <!-- {#if path !== '/'}
-						<li class="to-home" transition:fade|global>
-							<a on:click={closeMenu} sveltekit:prefetch href="/"> DRMDLR </a>
-						</li>
-					{/if} -->
+          {#if path !== '/'}
+            <li class="to-home" transition:fade|global>
+              <Link on:click={closeMenu} to="/">DRMDLR</Link>
+            </li>
+          {/if}
           <li class="link-to" class:active={path === '/catalog'}>
-            <a on:click={closeMenu} sveltekit:prefetch href="/catalog"
-              >Каталог</a
-            >
+            <Link on:click={closeMenu} to="/catalog">Каталог</Link>
           </li>
           <li class="link-to" class:active={path === '/about'}>
-            <a on:click={closeMenu} sveltekit:prefetch href="/about">Обо мне</a>
+            <Link on:click={closeMenu} to="/about">Обо мне</Link>
           </li>
           <li class="link-to" class:active={path === '/contacts'}>
-            <a on:click={closeMenu} sveltekit:prefetch href="/contacts"
-              >Контакты</a
-            >
+            <Link on:click={closeMenu} to="/contacts">Контакты</Link>
           </li>
         </ul>
       </nav>
     </div>
   </div>
   <div class="theme-state">
-    <a sveltekit:prefetch href="/blog" class:active={path === '/blog'}>Блог</a>
+    <Link to="/blog">Блог</Link>
   </div>
 </header>
 

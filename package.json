@@ -26,6 +26,7 @@
   "dependencies": {
     "sirv-cli": "^1.0.0",
     "svelte-check": "^4.3.2",
+    "svelte-routing": "^2.13.0",
     "typescript": "^5.9.3"
   }
 }
