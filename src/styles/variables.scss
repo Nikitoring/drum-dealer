@@ -6,28 +6,38 @@ $sm-max: 767px;
 $md: 768px;
 $md-max: 991px;
 $lg: 992px;
-$lg-max:1199px;
+$lg-max: 1199px;
 $xl: 1200px;
-$xl-max:1399px;
+$xl-max: 1399px;
 $xxl: 1400px;
+
+$primary: #3d9e86;
+$secondary: #cd9f17;
+$secondary-200: #fcf0d7;
+$secondary-300: #dfcb7e;
+
+$tertiary: #292005;
+$info: #fbf4df;
+$success: #2cd857;
+$warning: #748443;
+
+$text: #272828;
+$placeholder: #b0b5b4;
+$disabled: #d7dddb;
 
 /* xs (<=543px) */
 @media (max-width: $xs-max) {
-	
 }
 
 /* sm (>=576 и <=767) */
 @media (min-width: $sm) and (max-width: $sm-max) {
-	
 }
 
 /* md (>=768 и <=991) */
 @media (min-width: $md) and (max-width: $md-max) {
-	
 }
 /* lg (>=992 и <=1199) */
 @media (min-width: $lg) and (max-width: $lg-max) {
-	
 }
 /* xl (>=1200) */
 @media (min-width: $xl) and (max-width: $xl-max) {

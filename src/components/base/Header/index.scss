@@ -1,35 +1,21 @@
 @use '../../../styles/variables.scss';
+
 header {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-  align-items: center;
+  align-items: start;
 }
 .logo-wrapper {
-  padding: 3.5rem 0 0 2.6rem;
   z-index: 1000;
 }
 button.menu-logo {
   border: none;
   background: none;
   cursor: pointer;
-  width: 7.6rem;
-  height: 7.6rem;
+  margin: 1rem 1rem;
   padding: 0;
-}
-.left-stick {
-  transition: all ease-in 250ms;
-}
-.active.left-stick {
-  transition: all ease-in 250ms;
-  transform: rotate(45deg) translate(2rem, -4rem);
-}
-.active.right-stick {
-  transform: rotate(-45deg) translate(-4rem, 1.4rem);
-  transition: 300ms all ease-out 250ms;
-}
-.right-stick {
-  transition: 300ms all ease-in-out 250ms;
+  color: $primary;
 }
 .theme-state {
   display: block;
@@ -48,7 +34,6 @@ nav {
   justify-content: start;
   margin-top: 17rem;
   transition: 500ms all ease-in-out 500ms;
-  /* --background: rgba(255, 255, 255, 0.7); */
 }
 
 ul {
@@ -76,7 +61,7 @@ li {
     background-repeat: no-repeat;
     transition: 0.5s;
     &:hover {
-      color: var(--tertiary-color);
+      color: $tertiary;
       --d: 100%;
       --p: calc(100% + 8px);
     }
@@ -96,7 +81,7 @@ li {
   &.active {
     // text-decoration: underline;
     & a {
-      color: var(--tertiary-color);
+      color: $tertiary;
     }
   }
 }
@@ -105,13 +90,13 @@ nav a {
   display: flex;
   height: 100%;
   align-items: center;
-  color: var(--primary-color);
+  color: $primary !important;
   font-weight: 800;
   @media (min-width: $xl) and (max-width: $xl-max) {
-    font-size: 5rem;
+    font-size: 2rem;
   }
   @media (min-width: $xxl) {
-    font-size: 6rem;
+    font-size: 2rem;
   }
   /* xs (<=543px) */
   @media (max-width: $xs-max) {
@@ -120,7 +105,7 @@ nav a {
 
   /* sm (>=576 и <=767) */
   @media (min-width: $sm) and (max-width: $sm-max) {
-    font-size: 4rem;
+    font-size: 2rem;
   }
 
   /* md (>=768 и <=991) */
@@ -130,36 +115,36 @@ nav a {
 
   /* lg (>=992 и <=1199) */
   @media (min-width: $lg) and (max-width: $lg-max) {
-    font-size: 5rem;
+    font-size: 2rem;
   }
-  /* text-transform: uppercase; */
-  /* letter-spacing: 10%; */
   text-decoration: none;
   transition: color 0.2s linear;
   &:hover {
-    color: var(--tertiary-color);
+    color: $tertiary;
   }
 }
 .modal-drawer {
   z-index: 999;
   width: 0;
   height: 100%;
-  background: var(--accent-color);
-  color: var(--primary-color);
+  background: $secondary-200;
+  color: $primary;
   position: absolute;
   left: 0;
   top: 0;
-  box-shadow: 7px 3px 13px rgba(0, 0, 0, 0.25);
+  box-shadow: 7px 3px 13px rgba($secondary-200, 0.25);
+  :global(a) {
+    color: $primary !important;
+  }
 }
 .modal-drawer-on {
-  // min-width: 25%;
   width: 25%;
   transition: 500ms all ease-in 50ms;
   @media (min-width: $xl) and (max-width: $xl-max) {
     width: 25%;
   }
   @media (min-width: $xxl) {
-    font-size: 6rem;
+    font-size: 3rem;
   }
   /* xs (<=543px) */
   @media (max-width: $xs-max) {
@@ -195,7 +180,7 @@ nav a {
   height: 100%;
   pointer-events: none;
   position: fixed;
-  background: rgba(138, 114, 113, 0.72);
+  background: rgba($warning, 0.72);
 }
 .modal-shadow-on {
   opacity: 1;

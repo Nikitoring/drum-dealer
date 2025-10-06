@@ -1,0 +1,75 @@
+@import './variables.scss';
+
+:global(body) {
+  min-height: 100vh;
+  box-sizing: border-box;
+  overflow: hidden;
+  background-color: $info;
+}
+:global(main) {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  margin: 0 auto;
+}
+
+:global(a) {
+  text-decoration: none;
+}
+:global(p) {
+  margin: 0;
+}
+
+section {
+  display: flex;
+  justify-content: start;
+  align-items: flex-start;
+  // margin: 0 auto;
+  height: 100vh;
+  padding: 5rem 0;
+}
+
+.title-primary {
+  font-weight: 800;
+  color: $primary;
+  font-size: 15rem;
+}
+
+.title-secondary {
+  font-weight: 600;
+  color: $secondary;
+  font-size: 3rem;
+}
+.square {
+  position: relative;
+  display: flex;
+  flex-direction: row;
+  justify-content: start;
+  align-items: stretch;
+  &::before {
+    z-index: 2;
+    position: absolute;
+    content: ' ';
+    right: -22rem;
+    width: 30rem;
+    height: 30rem;
+    background: url(/drums.svg) no-repeat center;
+    background-size: contain;
+    top: 2.6rem;
+  }
+  &::after {
+    content: 'DEALER';
+    font-weight: 700;
+    font-size: 7rem;
+    color: $info;
+    transform: rotate(90deg);
+    position: absolute;
+    left: 0;
+    top: 0;
+    background: $primary;
+    width: 30rem;
+    height: 30rem;
+  }
+}
