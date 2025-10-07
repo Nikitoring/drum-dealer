@@ -13,13 +13,13 @@
     src = 'menu-logo.svg';
   }
 
-  function closeMenu() {
+  let path = '';
+
+  function closeMenu(passedPath) {
     isMenuShow = false;
     src = 'menu-logo.svg';
+    path = passedPath;
   }
-  let current_url = '';
-  let path = '';
-  onMount(() => (current_url = window.location.href));
 </script>
 
 <header>
@@ -35,18 +35,23 @@
         <ul>
           {#if path !== '/'}
             <li class="to-home">
-              <Link on:click={closeMenu} to="/">DRMDLR</Link>
+              <Link on:click={() => closeMenu('/')} to="/">DRMDLR</Link>
             </li>
           {/if}
           <li class="link-to" class:active={path === '/catalog'}>
-            <Link on:click={closeMenu} to="/catalog">Каталог</Link>
+            <Link on:click={() => closeMenu('/catalog')} to="/catalog"
+              >Каталог</Link
+            >
           </li>
-          <li class="link-to" class:active={path === '/covry'}>
-            <Link on:click={closeMenu} to="/about">"Ковры"</Link>
+          <li class="link-to" class:active={path === '/kovry'}>
+            <Link on:click={() => closeMenu('/kovry')} to="/kovry">"Ковры"</Link
+            >
           </li>
           <li class="link-to" class:active={path === '/contacts'}>
-            <Link class="primary-color" on:click={closeMenu} to="/contacts"
-              >Контакты</Link
+            <Link
+              class="primary-color"
+              on:click={() => closeMenu('/contacts')}
+              to="/contacts">Контакты</Link
             >
           </li>
         </ul>

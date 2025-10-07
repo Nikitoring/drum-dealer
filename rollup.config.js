@@ -9,7 +9,7 @@ import sveltePreprocess from 'svelte-preprocess';
 
 const preprocess = sveltePreprocess({
   scss: {
-    prependData: `@import './src/styles/variables.scss';`,
+    prependData: `@import './src/styles/variables.scss'; @import 'src/styles/main.scss';`,
   },
   postcss: {
     plugins: [require('autoprefixer')],
