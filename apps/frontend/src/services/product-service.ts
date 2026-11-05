@@ -2,7 +2,10 @@ import { apiRequest } from '@/lib/api';
 import type { Paginated, Product, ProductFilters } from '@/types/api';
 
 const toSearchParams = (filters: ProductFilters, page: number) => {
-  const params = new URLSearchParams({ page: String(page), pageSize: String(filters.pageSize ?? 12) });
+  const params = new URLSearchParams({
+    page: String(page),
+    pageSize: String(filters.pageSize ?? 12),
+  });
   if (filters.search?.trim()) params.set('q', filters.search.trim());
   if (filters.category) params.set('category', filters.category);
   if (filters.brand) params.set('brand', filters.brand);
@@ -17,5 +20,8 @@ export const productService = {
   bySlug: (slug: string, signal?: AbortSignal) =>
     apiRequest<Product>(`/products/${encodeURIComponent(slug)}`, { signal }),
   related: (category: string, signal?: AbortSignal) =>
-    apiRequest<Paginated<Product>>(`/products?page=1&pageSize=4&category=${encodeURIComponent(category)}`, { signal }),
+    apiRequest<Paginated<Product>>(
+      `/products?page=1&pageSize=4&category=${encodeURIComponent(category)}`,
+      { signal },
+    ),
 };

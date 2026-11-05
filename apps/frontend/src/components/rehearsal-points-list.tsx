@@ -11,11 +11,27 @@ export function RehearsalPointsList() {
   if (isError) return <p role="alert">Не удалось загрузить список репетиционных точек.</p>;
   if (!points.length) return <p>Репетиционные точки пока не добавлены.</p>;
 
-  return <div className="points-grid">{points.map((point) => <article className="point-card" key={point.id}>
-    <Image alt="Репетиционное пространство" height={296} src="/design/05-rehearsal-building.png" width={310} />
-    <div><p className="eyebrow">Репетиционная точка</p><h2>{point.name}</h2><p>{point.address}</p>
-      {point.description && <p>{point.description}</p>}
-      <Link className="button button-red" href={`/kovry/${point.slug}`}>Подробнее <span aria-hidden="true">→</span></Link>
+  return (
+    <div className="points-grid">
+      {points.map((point) => (
+        <article className="point-card" key={point.id}>
+          <Image
+            alt="Репетиционное пространство"
+            height={296}
+            src="/design/05-rehearsal-building.png"
+            width={310}
+          />
+          <div>
+            <p className="eyebrow">Репетиционная точка</p>
+            <h2>{point.name}</h2>
+            <p>{point.address}</p>
+            {point.description && <p>{point.description}</p>}
+            <Link className="button button-red" href={`/kovry/${point.slug}`}>
+              Подробнее <span aria-hidden="true">→</span>
+            </Link>
+          </div>
+        </article>
+      ))}
     </div>
-  </article>)}</div>;
+  );
 }

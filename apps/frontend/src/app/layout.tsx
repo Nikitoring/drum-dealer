@@ -29,19 +29,18 @@ const buran = localFont({
 
 export const metadata: Metadata = {
   title: 'Drum Dealer & Ковры',
-  description:
-    'Музыкальное оборудование из Японии и репетиционные точки «Ковры».',
+  description: 'Музыкальное оборудование из Японии и репетиционные точки «Ковры».',
 };
 
-export default function RootLayout({
-  children,
-}: Readonly<{ children: React.ReactNode }>) {
+export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html
       lang="ru"
       className={`${inter.variable} ${oswald.variable} ${manrope.variable} ${buran.variable}`}
     >
-      <body><QueryProvider>{children}</QueryProvider></body>
+      <body>
+        <QueryProvider>{children}</QueryProvider>
+      </body>
     </html>
   );
 }

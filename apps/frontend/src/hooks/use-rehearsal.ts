@@ -16,7 +16,13 @@ export function useRehearsalPoint(slug: string) {
   });
 }
 
-export function useRehearsalSlots(slug: string, date: string, from: string, to: string, enabled: boolean) {
+export function useRehearsalSlots(
+  slug: string,
+  date: string,
+  from: string,
+  to: string,
+  enabled: boolean,
+) {
   return useQuery({
     queryKey: ['rehearsal-slots', slug, date],
     queryFn: ({ signal }) => rehearsalService.slots(slug, from, to, signal),
@@ -28,6 +34,9 @@ export function useCreateBooking(slug: string, date: string) {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: (input: CreateBookingInput) => rehearsalService.createBooking(input),
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: ['rehearsal-slots', slug, date] }),
+    onSuccess: () =>
+      queryClient.invalidateQueries({
+        queryKey: ['rehearsal-slots', slug, date],
+      }),
   });
 }

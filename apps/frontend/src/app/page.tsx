@@ -116,8 +116,8 @@ export default function HomePage() {
             <div>
               <h2>Drum Dealer</h2>
               <p>
-                Барабаны, стойки, педали и аксессуары. Отборные инструменты из
-                Японии для репетиций, студии и сцены.
+                Барабаны, стойки, педали и аксессуары. Отборные инструменты из Японии для репетиций,
+                студии и сцены.
               </p>
               <Link className="button button-outline-red" href="/catalog">
                 В каталог <span aria-hidden="true">→</span>
@@ -133,20 +133,12 @@ export default function HomePage() {
           <article className="home-direction-card">
             <div>
               <h2>Ковры</h2>
-              <p>
-                Уютные репетиционные точки с профессиональным оборудованием в
-                центре города.
-              </p>
+              <p>Уютные репетиционные точки с профессиональным оборудованием в центре города.</p>
               <Link className="button button-outline-red" href="/kovry">
                 Выбрать точку <span aria-hidden="true">→</span>
               </Link>
             </div>
-            <Image
-              alt="Мегафон"
-              height={400}
-              src={illustration('06-megaphone')}
-              width={506}
-            />
+            <Image alt="Мегафон" height={400} src={illustration('06-megaphone')} width={506} />
           </article>
         </section>
 
@@ -160,12 +152,7 @@ export default function HomePage() {
             />
           </div>
           <div className="poster-figure poster-building">
-            <Image
-              alt="Здание"
-              height={426}
-              src={illustration('03-building')}
-              width={515}
-            />
+            <Image alt="Здание" height={426} src={illustration('03-building')} width={515} />
           </div>
           <p>
             Музыка

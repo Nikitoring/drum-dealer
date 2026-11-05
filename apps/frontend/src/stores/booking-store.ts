@@ -10,7 +10,8 @@ type BookingState = {
 };
 
 const today = new Date();
-const localDate = (date: Date) => `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
+const localDate = (date: Date) =>
+  `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
 
 export const useBookingStore = create<BookingState>((set) => ({
   selectedPointId: null,
