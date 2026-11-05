@@ -1,0 +1,25 @@
+{
+  "name": "drum-dealer",
+  "version": "0.1.0",
+  "private": true,
+  "workspaces": [
+    "apps/frontend",
+    "apps/backend"
+  ],
+  "scripts": {
+    "dev": "concurrently --kill-others -n frontend,backend -c blue,green \"npm:dev --workspace=@drum-dealer/frontend\" \"npm:dev --workspace=@drum-dealer/backend\"",
+    "dev:frontend": "npm run dev --workspace=@drum-dealer/frontend",
+    "dev:backend": "npm run dev --workspace=@drum-dealer/backend",
+    "build": "npm run build --workspaces --if-present",
+    "db:up": "docker compose up -d postgres",
+    "db:down": "docker compose down",
+    "db:generate": "npm run prisma:generate --workspace=@drum-dealer/backend",
+    "db:migrate": "npm run prisma:migrate --workspace=@drum-dealer/backend"
+  },
+  "devDependencies": {
+    "concurrently": "^9.1.2"
+  },
+  "engines": {
+    "node": ">=20.11"
+  }
+}

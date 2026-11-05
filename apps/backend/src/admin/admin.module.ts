@@ -1,0 +1,1 @@
+import { Module } from "@nestjs/common"; import { AdminAuthController, DashboardController } from "./admin.controller"; @Module({ controllers: [AdminAuthController, DashboardController] }) export class AdminModule {}

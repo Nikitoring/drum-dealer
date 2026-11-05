@@ -1,0 +1,2 @@
+import { Module } from "@nestjs/common"; import { AdminRehearsalPointsController, AdminSlotsController, RehearsalPointsController } from "./rehearsal-points.controller"; import { RehearsalPointsService } from "./rehearsal-points.service";
+@Module({ controllers: [RehearsalPointsController, AdminRehearsalPointsController, AdminSlotsController], providers: [RehearsalPointsService] }) export class RehearsalPointsModule {}
