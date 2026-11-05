@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import localFont from 'next/font/local';
 import { Inter, Manrope, Oswald } from 'next/font/google';
 import './globals.css';
+import { QueryProvider } from '@/components/query-provider';
 
 const inter = Inter({
   subsets: ['latin', 'cyrillic'],
@@ -40,7 +41,7 @@ export default function RootLayout({
       lang="ru"
       className={`${inter.variable} ${oswald.variable} ${manrope.variable} ${buran.variable}`}
     >
-      <body>{children}</body>
+      <body><QueryProvider>{children}</QueryProvider></body>
     </html>
   );
 }
