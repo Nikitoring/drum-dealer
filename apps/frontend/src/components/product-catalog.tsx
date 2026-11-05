@@ -2,17 +2,13 @@
 
 import Image from 'next/image';
 import Link from 'next/link';
-import { useState } from 'react';
 import { useProducts } from '@/hooks/use-products';
 import type { ProductCondition } from '@/types/api';
+import { useCatalogFiltersStore } from '@/stores/product-store';
 const rubles = new Intl.NumberFormat('ru-RU');
 
 export function ProductCatalog() {
-  const [search, setSearch] = useState('');
-  const [condition, setCondition] = useState<ProductCondition | 'all'>('all');
-  const [category, setCategory] = useState('all');
-  const [brand, setBrand] = useState('all');
-  const [sort, setSort] = useState('default');
+  const { search, condition, category, brand, sort, setFilter, reset } = useCatalogFiltersStore();
   const productsQuery = useProducts({
     brand: brand === 'all' ? undefined : brand,
     category: category === 'all' ? undefined : category,
@@ -21,17 +17,6 @@ export function ProductCatalog() {
     sort,
   });
   const products = productsQuery.data?.pages.flatMap((result) => result.data) ?? [];
-
-  const reset = () => {
-    setCategory('all');
-    setBrand('all');
-    setCondition('all');
-    setSearch('');
-    setSort('default');
-  };
-  const updateFilter = (update: () => void) => {
-    update();
-  };
 
   return (
     <div className="catalog-content">
@@ -49,7 +34,7 @@ export function ProductCatalog() {
             <label key={item}>
               <input
                 checked={category === item}
-                onChange={() => updateFilter(() => setCategory(category === item ? 'all' : item))}
+                onChange={() => setFilter('category', category === item ? 'all' : item)}
                 type="checkbox"
               />{' '}
               {item}
@@ -60,7 +45,7 @@ export function ProductCatalog() {
             <label key={item}>
               <input
                 checked={brand === item}
-                onChange={() => updateFilter(() => setBrand(brand === item ? 'all' : item))}
+                onChange={() => setFilter('brand', brand === item ? 'all' : item)}
                 type="checkbox"
               />{' '}
               {item}
@@ -71,7 +56,7 @@ export function ProductCatalog() {
             <label key={item}>
               <input
                 checked={condition === item}
-                onChange={() => updateFilter(() => setCondition(condition === item ? 'all' : item))}
+                onChange={() => setFilter('condition', condition === item ? 'all' : item)}
                 type="checkbox"
               />{' '}
               {item === 'NEW' ? 'Новый' : 'Б/у'}
@@ -89,7 +74,7 @@ export function ProductCatalog() {
             <select
               className="filter-control"
               id="category-filter"
-              onChange={(event) => updateFilter(() => setCategory(event.target.value))}
+              onChange={(event) => setFilter('category', event.target.value)}
               value={category}
             >
               <option value="all">Категория⌄</option>
@@ -102,7 +87,7 @@ export function ProductCatalog() {
             <select
               className="filter-control"
               id="sort-filter"
-              onChange={(event) => updateFilter(() => setSort(event.target.value))}
+              onChange={(event) => setFilter('sort', event.target.value)}
               value={sort}
             >
               <option value="default">Сначала новые</option>
@@ -114,7 +99,7 @@ export function ProductCatalog() {
               <span aria-hidden="true">⌕</span>
               <span className="sr-only">Поиск товаров</span>
               <input
-                onChange={(event) => updateFilter(() => setSearch(event.target.value))}
+                onChange={(event) => setFilter('search', event.target.value)}
                 placeholder="Найти товар..."
                 type="search"
                 value={search}

@@ -7,7 +7,7 @@
     "apps/backend"
   ],
   "scripts": {
-    "dev": "concurrently --kill-others -n frontend,backend -c blue,green \"npm:dev --workspace=@drum-dealer/frontend\" \"npm:dev --workspace=@drum-dealer/backend\"",
+    "dev": "npm run db:up && concurrently --kill-others -n frontend,backend -c blue,green \"npm:dev --workspace=@drum-dealer/frontend\" \"npm:dev --workspace=@drum-dealer/backend\"",
     "dev:frontend": "npm run dev --workspace=@drum-dealer/frontend",
     "dev:backend": "npm run dev --workspace=@drum-dealer/backend",
     "build": "npm run build --workspaces --if-present",

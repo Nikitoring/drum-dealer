@@ -1,5 +1,5 @@
 export type ProductCondition = 'NEW' | 'USED';
-export type ProductStatus = 'AVAILABLE' | 'SOLD';
+export type ProductStatus = 'AVAILABLE' | 'SOLD' | 'HIDDEN';
 
 export type Product = {
   id?: string;
@@ -29,6 +29,26 @@ export type ProductFilters = {
   pageSize?: number;
 };
 
+export type AdminProductFilters = ProductFilters & {
+  status?: ProductStatus;
+};
+
+export type CreateProductInput = {
+  name: string;
+  slug: string;
+  brand?: string;
+  category: string;
+  price: string;
+  condition: ProductCondition;
+  status: ProductStatus;
+  description?: string;
+  specifications?: Record<string, string>;
+};
+
+export type UpdateProductInput = Partial<CreateProductInput>;
+
+export type ProductImage = { id: string; url: string; position: number };
+
 export type RehearsalPoint = {
   id: string;
   slug: string;
@@ -47,6 +67,18 @@ export type TimeSlot = {
   status: 'AVAILABLE' | 'PENDING' | 'BOOKED' | 'BLOCKED';
 };
 
+export type AdminSchedulePoint = {
+  point: RehearsalPoint;
+  slots: (TimeSlot & {
+    bookings: { id: string; status: BookingStatus; customerName: string }[];
+  })[];
+};
+
+export type AdminSchedule = {
+  data: AdminSchedulePoint[];
+  range: { from: string | null; to: string | null };
+};
+
 export type CreateBookingInput = {
   timeSlotId: string;
   customerName: string;
@@ -58,4 +90,21 @@ export type CreateBookingInput = {
 
 export type CreatedBooking = {
   data: { id: string; status: string; timeSlotId: string };
+};
+
+export type BookingStatus = 'PENDING' | 'CONFIRMED' | 'REJECTED' | 'CANCELLED';
+
+export type Booking = {
+  id: string;
+  customerName: string;
+  customerPhone: string;
+  customerEmail: string | null;
+  comment: string | null;
+  status: BookingStatus;
+  createdAt: string;
+  timeSlot: {
+    startAt: string;
+    endAt: string;
+    rehearsalPoint: { name: string };
+  };
 };

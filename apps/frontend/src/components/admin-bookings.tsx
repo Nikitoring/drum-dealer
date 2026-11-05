@@ -1,39 +1,37 @@
 'use client';
+
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { useState } from 'react';
-type Status = 'pending' | 'confirmed' | 'rejected';
-const initial = [
-  {
-    id: 1,
-    date: '14.04, 16:00 – 17:00',
-    point: 'Ковры №1',
-    name: 'Иван Иванов',
-    phone: '+7 (999) 123-45-67',
-    status: 'pending' as Status,
-  },
-  {
-    id: 2,
-    date: '14.04, 18:00 – 19:00',
-    point: 'Ковры №2',
-    name: 'Анна Смирнова',
-    phone: '+7 (999) 887-65-43',
-    status: 'confirmed' as Status,
-  },
-  {
-    id: 3,
-    date: '15.04, 14:00 – 15:00',
-    point: 'Ковры №1',
-    name: 'Алексей Сидоров',
-    phone: '+7 (999) 555-44-33',
-    status: 'rejected' as Status,
-  },
-];
-const label: Record<Status, string> = {
-  pending: 'Ожидает',
-  confirmed: 'Подтверждена',
-  rejected: 'Отклонена',
+import {
+  useAdminBookingCount,
+  useAdminBookings,
+  useUpdateBookingStatus,
+} from '@/hooks/use-admin-bookings';
+import { useAdminProducts } from '@/hooks/use-admin-products';
+import { clearAdminToken } from '@/lib/auth';
+import type { Booking, BookingStatus } from '@/types/api';
+
+const labels: Record<BookingStatus, string> = {
+  PENDING: 'Ожидает',
+  CONFIRMED: 'Подтверждена',
+  REJECTED: 'Отклонена',
+  CANCELLED: 'Отменена',
 };
+
+const formatBookingDate = (booking: Booking) => {
+  const start = new Date(booking.timeSlot.startAt);
+  const end = new Date(booking.timeSlot.endAt);
+  return `${start.toLocaleDateString('ru-RU', { day: '2-digit', month: '2-digit' })}, ${start.toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' })} – ${end.toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' })}`;
+};
+
 export function AdminDashboard() {
+  const recent = useAdminBookings();
+  const products = useAdminProducts({});
+  const pending = useAdminBookingCount('PENDING');
+  const totalBookings = useAdminBookingCount();
+  const bookings = recent.data?.data.slice(0, 3) ?? [];
+
   return (
     <>
       <h1>Дашборд</h1>
@@ -41,111 +39,164 @@ export function AdminDashboard() {
         <article>
           <span>◇</span>
           <p>Товары</p>
-          <strong>24</strong>
+          <strong>{products.data?.pages[0]?.meta.total ?? '—'}</strong>
         </article>
         <article>
           <span>▣</span>
-          <p>Заказы</p>
-          <strong>8</strong>
+          <p>Заявки</p>
+          <strong>{totalBookings.data?.meta.total ?? '—'}</strong>
         </article>
         <article>
           <span>◷</span>
           <p>Ожидают</p>
-          <strong className="red-number">3</strong>
+          <strong className="red-number">{pending.data?.meta.total ?? '—'}</strong>
         </article>
       </div>
       <div className="dashboard-heading">
         <h2>Последние заявки</h2>
         <Link href="/admin/bookings">Все заявки →</Link>
       </div>
-      <div className="recent-bookings">
-        {initial.map((item) => (
-          <div key={item.id}>
-            <b>{item.date}</b>
-            <span>{item.name}</span>
-            <em className={item.status}>{label[item.status]}</em>
-          </div>
-        ))}
-      </div>
+      {recent.isPending ? (
+        <p role="status">Загружаем заявки…</p>
+      ) : recent.isError ? (
+        <p role="alert">{recent.error.message}</p>
+      ) : (
+        <div className="recent-bookings">
+          {bookings.map((booking) => (
+            <div key={booking.id}>
+              <b>{formatBookingDate(booking)}</b>
+              <span>{booking.customerName}</span>
+              <em className={booking.status.toLowerCase()}>{labels[booking.status]}</em>
+            </div>
+          ))}
+          {!bookings.length && <p>Заявок пока нет.</p>}
+        </div>
+      )}
     </>
   );
 }
+
 export function AdminBookings() {
-  const [filter, setFilter] = useState<'all' | Status>('all');
-  const [bookings, setBookings] = useState(initial);
-  const visible = filter === 'all' ? bookings : bookings.filter((x) => x.status === filter);
-  const update = (id: number, status: Status) =>
-    setBookings((list) => list.map((x) => (x.id === id ? { ...x, status } : x)));
+  const [filter, setFilter] = useState<BookingStatus | undefined>();
+  const query = useAdminBookings(filter);
+  const updateStatus = useUpdateBookingStatus();
+  const all = useAdminBookingCount();
+  const pending = useAdminBookingCount('PENDING');
+  const confirmed = useAdminBookingCount('CONFIRMED');
+  const rejected = useAdminBookingCount('REJECTED');
+  const counts: Record<string, number | undefined> = {
+    all: all.data?.meta.total,
+    PENDING: pending.data?.meta.total,
+    CONFIRMED: confirmed.data?.meta.total,
+    REJECTED: rejected.data?.meta.total,
+  };
+  const bookings = query.data?.data ?? [];
+  const tabs = [
+    ['all', 'Все', undefined],
+    ['PENDING', 'Ожидают', 'PENDING'],
+    ['CONFIRMED', 'Подтверждены', 'CONFIRMED'],
+    ['REJECTED', 'Отклонены', 'REJECTED'],
+  ] as const;
+
   return (
     <>
       <h1>Заявки на бронирование</h1>
       <div className="booking-tabs">
-        {(
-          [
-            ['all', 'Все', 12],
-            ['pending', 'Ожидают', 2],
-            ['confirmed', 'Подтверждены', 8],
-            ['rejected', 'Отклонены', 2],
-          ] as const
-        ).map(([id, text, count]) => (
-          <button aria-pressed={filter === id} key={id} onClick={() => setFilter(id)} type="button">
-            {text} <b>{count}</b>
+        {tabs.map(([id, text, status]) => (
+          <button
+            aria-pressed={filter === status}
+            key={id}
+            onClick={() => setFilter(status)}
+            type="button"
+          >
+            {text} <b>{counts[id] ?? '—'}</b>
           </button>
         ))}
       </div>
-      <div className="booking-table-wrap">
-        <table className="booking-table">
-          <thead>
-            <tr>
-              <th>Дата и время</th>
-              <th>Точка</th>
-              <th>Клиент</th>
-              <th>Статус</th>
-              <th />
-            </tr>
-          </thead>
-          <tbody>
-            {visible.map((booking) => (
-              <tr key={booking.id}>
-                <td>{booking.date}</td>
-                <td>{booking.point}</td>
-                <td>
-                  {booking.name}
-                  <small>{booking.phone}</small>
-                </td>
-                <td>
-                  <span className={`status-pill ${booking.status}`}>{label[booking.status]}</span>
-                </td>
-                <td>
-                  {booking.status === 'pending' && (
-                    <div className="table-actions">
-                      <button
-                        aria-label="Подтвердить"
-                        className="table-action accept"
-                        onClick={() => update(booking.id, 'confirmed')}
-                        type="button"
-                      >
-                        ✓
-                      </button>
-                      <button
-                        aria-label="Отклонить"
-                        className="table-action reject"
-                        onClick={() => update(booking.id, 'rejected')}
-                        type="button"
-                      >
-                        ×
-                      </button>
-                    </div>
-                  )}
-                </td>
+      {query.isPending ? (
+        <p role="status">Загружаем заявки…</p>
+      ) : query.isError ? (
+        <p role="alert">{query.error.message}</p>
+      ) : (
+        <div className="booking-table-wrap">
+          <table className="booking-table">
+            <thead>
+              <tr>
+                <th>Дата и время</th>
+                <th>Точка</th>
+                <th>Клиент</th>
+                <th>Статус</th>
+                <th />
               </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+            </thead>
+            <tbody>
+              {bookings.map((booking) => (
+                <BookingRow
+                  booking={booking}
+                  isUpdating={updateStatus.isPending}
+                  key={booking.id}
+                  updateStatus={updateStatus.mutate}
+                />
+              ))}
+            </tbody>
+          </table>
+          {!bookings.length && <p>Заявок нет.</p>}
+        </div>
+      )}
     </>
   );
 }
+
+function BookingRow({
+  booking,
+  updateStatus,
+  isUpdating,
+}: {
+  booking: Booking;
+  updateStatus: (input: { id: string; status: BookingStatus }) => void;
+  isUpdating: boolean;
+}) {
+  return (
+    <tr>
+      <td>{formatBookingDate(booking)}</td>
+      <td>{booking.timeSlot.rehearsalPoint.name}</td>
+      <td>
+        {booking.customerName}
+        <small>{booking.customerPhone}</small>
+      </td>
+      <td>
+        <span className={`status-pill ${booking.status.toLowerCase()}`}>
+          {labels[booking.status]}
+        </span>
+      </td>
+      <td>
+        {booking.status === 'PENDING' && (
+          <div className="table-actions">
+            <button
+              aria-label="Подтвердить"
+              className="table-action accept"
+              disabled={isUpdating}
+              onClick={() => updateStatus({ id: booking.id, status: 'CONFIRMED' })}
+              type="button"
+            >
+              ✓
+            </button>
+            <button
+              aria-label="Отклонить"
+              className="table-action reject"
+              disabled={isUpdating}
+              onClick={() => updateStatus({ id: booking.id, status: 'REJECTED' })}
+              type="button"
+            >
+              ×
+            </button>
+          </div>
+        )}
+      </td>
+    </tr>
+  );
+}
+
 export function AdminPanel({
   active = 'bookings',
   children,
@@ -153,6 +204,7 @@ export function AdminPanel({
   active?: string;
   children?: React.ReactNode;
 }) {
+  const router = useRouter();
   const menu = [
     { icon: '⌂', label: 'Дашборд', href: '/admin/dashboard', id: 'dashboard' },
     { icon: '▣', label: 'Заявки', href: '/admin/bookings', id: 'bookings' },
@@ -183,9 +235,16 @@ export function AdminPanel({
             </Link>
           ))}
         </nav>
-        <Link className="admin-logout" href="/admin/login">
+        <button
+          className="admin-logout"
+          onClick={() => {
+            clearAdminToken();
+            router.replace('/admin/login');
+          }}
+          type="button"
+        >
           ⌕ &nbsp; Выход
-        </Link>
+        </button>
       </aside>
       <div className="admin-main">
         <header className="admin-topbar">
