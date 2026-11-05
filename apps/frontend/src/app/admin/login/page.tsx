@@ -3,6 +3,7 @@
 import { FormEvent, useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { clearAdminToken, getAdminToken, loginAdmin, setAdminToken } from '@/lib/auth';
+import { DrmButton, DrmInput } from '@/components/ui';
 
 export default function AdminLoginPage() {
   const router = useRouter();
@@ -39,7 +40,7 @@ export default function AdminLoginPage() {
       <form className="mt-8 space-y-5" onSubmit={handleSubmit}>
         <label className="block">
           <span className="mb-2 block">Email</span>
-          <input
+          <DrmInput
             autoComplete="email"
             onChange={(event) => setEmail(event.target.value)}
             required
@@ -49,7 +50,7 @@ export default function AdminLoginPage() {
         </label>
         <label className="block">
           <span className="mb-2 block">Пароль</span>
-          <input
+          <DrmInput
             autoComplete="current-password"
             onChange={(event) => setPassword(event.target.value)}
             required
@@ -58,9 +59,9 @@ export default function AdminLoginPage() {
           />
         </label>
         {error && <p role="alert">{error}</p>}
-        <button className="button button-red" disabled={isSubmitting} type="submit">
+        <DrmButton className="button-red" disabled={isSubmitting} type="submit">
           {isSubmitting ? 'Входим…' : 'Войти'}
-        </button>
+        </DrmButton>
       </form>
     </main>
   );

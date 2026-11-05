@@ -1,0 +1,27 @@
+.booking-table-wrap {
+  overflow-x: auto;
+  border-top: 1px solid rgba(23, 23, 23, 0.16);
+}
+.booking-table {
+  width: 100%;
+  min-width: 680px;
+  border-collapse: collapse;
+  text-align: left;
+}
+.booking-table th,
+.booking-table td {
+  padding: 18px 12px;
+  border-bottom: 1px solid rgba(23, 23, 23, 0.14);
+  vertical-align: middle;
+}
+.booking-table th {
+  font-size: 14px;
+}
+.booking-table td {
+  font-size: 14px;
+}
+.booking-table td small {
+  display: block;
+  margin-top: 5px;
+  color: var(--gray);
+}

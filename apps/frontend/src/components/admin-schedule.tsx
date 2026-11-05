@@ -2,6 +2,7 @@
 
 import { useMemo, useState } from 'react';
 import { useAdminSchedule, useAdminScheduleMutations } from '@/hooks/use-admin-schedule';
+import { DrmButton, DrmInput, DrmSelect } from '@/components/ui';
 import type { TimeSlot } from '@/types/api';
 
 const dayKey = (date: Date) => {
@@ -53,7 +54,7 @@ export function AdminSchedule() {
           {dates.map((date) => {
             const value = dayKey(date);
             return (
-              <button
+              <DrmButton
                 key={value}
                 aria-pressed={selectedDate === value}
                 onClick={() => setSelectedDate(value)}
@@ -61,20 +62,20 @@ export function AdminSchedule() {
               >
                 <b>{date.toLocaleDateString('ru-RU', { weekday: 'short' })}</b>
                 <span>{date.getDate()}</span>
-              </button>
+              </DrmButton>
             );
           })}
         </div>
         <label className="schedule-filter">
           Точка
-          <select value={pointId} onChange={(event) => setPointId(event.target.value)}>
+          <DrmSelect value={pointId} onChange={(event) => setPointId(event.target.value)}>
             <option value="all">Все точки</option>
             {schedule.data?.data.map(({ point }) => (
               <option key={point.id} value={point.id}>
                 {point.name}
               </option>
             ))}
-          </select>
+          </DrmSelect>
         </label>
       </div>
       {schedule.isPending ? (
@@ -99,19 +100,19 @@ export function AdminSchedule() {
                     });
                   }}
                 >
-                  <input
+                  <DrmInput
                     aria-label="Время нового слота"
                     type="time"
                     value={newSlotTime}
                     onChange={(event) => setNewSlotTime(event.target.value)}
                   />
-                  <button
-                    className="button button-red"
+                  <DrmButton
+                    className="button-red"
                     disabled={mutations.createSlot.isPending}
                     type="submit"
                   >
                     + Добавить слот
-                  </button>
+                  </DrmButton>
                 </form>
               </div>
               <div className="schedule-slots">
@@ -127,7 +128,7 @@ export function AdminSchedule() {
                       </span>
                     </div>
                     {(slot.status === 'AVAILABLE' || slot.status === 'BLOCKED') && (
-                      <button
+                      <DrmButton
                         disabled={mutations.updateStatus.isPending}
                         onClick={() =>
                           mutations.updateStatus.mutate({
@@ -138,7 +139,7 @@ export function AdminSchedule() {
                         type="button"
                       >
                         {slot.status === 'BLOCKED' ? 'Открыть' : 'Закрыть'}
-                      </button>
+                      </DrmButton>
                     )}
                   </article>
                 ))}

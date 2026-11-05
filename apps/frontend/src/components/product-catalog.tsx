@@ -3,6 +3,7 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { useProducts } from '@/hooks/use-products';
+import { DrmButton, DrmCheckbox, DrmInput, DrmSelect } from '@/components/ui';
 import type { ProductCondition } from '@/types/api';
 import { useCatalogFiltersStore } from '@/stores/product-store';
 const rubles = new Intl.NumberFormat('ru-RU');
@@ -32,10 +33,9 @@ export function ProductCatalog() {
             'Аксессуары',
           ].map((item) => (
             <label key={item}>
-              <input
+              <DrmCheckbox
                 checked={category === item}
                 onChange={() => setFilter('category', category === item ? 'all' : item)}
-                type="checkbox"
               />{' '}
               {item}
             </label>
@@ -43,10 +43,9 @@ export function ProductCatalog() {
           <h2>Бренд</h2>
           {['TAMA', 'Pearl', 'Yamaha', 'Ludwig'].map((item) => (
             <label key={item}>
-              <input
+              <DrmCheckbox
                 checked={brand === item}
                 onChange={() => setFilter('brand', brand === item ? 'all' : item)}
-                type="checkbox"
               />{' '}
               {item}
             </label>
@@ -54,37 +53,36 @@ export function ProductCatalog() {
           <h2>Состояние</h2>
           {(['NEW', 'USED'] as ProductCondition[]).map((item) => (
             <label key={item}>
-              <input
+              <DrmCheckbox
                 checked={condition === item}
                 onChange={() => setFilter('condition', condition === item ? 'all' : item)}
-                type="checkbox"
               />{' '}
               {item === 'NEW' ? 'Новый' : 'Б/у'}
             </label>
           ))}
-          <button className="filter-reset" onClick={reset} type="button">
+          <DrmButton className="filter-reset" onClick={reset} type="button">
             Сбросить
-          </button>
+          </DrmButton>
         </aside>
         <div className="catalog-results">
           <div aria-label="Фильтры каталога" className="catalog-toolbar">
             <label className="sr-only" htmlFor="category-filter">
               Категория
             </label>
-            <select
+            <DrmSelect
               className="filter-control"
               id="category-filter"
               onChange={(event) => setFilter('category', event.target.value)}
               value={category}
             >
-              <option value="all">Категория⌄</option>
+              <option value="all">Категория</option>
               <option value="Акустические барабаны">Акустические</option>
               <option value="Малые барабаны">Малые барабаны</option>
-            </select>
+            </DrmSelect>
             <label className="sr-only" htmlFor="sort-filter">
               Сортировка
             </label>
-            <select
+            <DrmSelect
               className="filter-control"
               id="sort-filter"
               onChange={(event) => setFilter('sort', event.target.value)}
@@ -94,11 +92,11 @@ export function ProductCatalog() {
               <option value="price_asc">Сначала дешевле</option>
               <option value="price_desc">Сначала дороже</option>
               <option value="oldest">Сначала старые</option>
-            </select>
+            </DrmSelect>
             <label className="search-control">
               <span aria-hidden="true">⌕</span>
               <span className="sr-only">Поиск товаров</span>
-              <input
+              <DrmInput
                 onChange={(event) => setFilter('search', event.target.value)}
                 placeholder="Найти товар..."
                 type="search"
@@ -142,14 +140,14 @@ export function ProductCatalog() {
               </div>
               {productsQuery.hasNextPage && (
                 <div className="pagination">
-                  <button
+                  <DrmButton
                     className="button button-outline-red"
                     disabled={productsQuery.isFetchingNextPage}
                     onClick={() => productsQuery.fetchNextPage()}
                     type="button"
                   >
                     {productsQuery.isFetchingNextPage ? 'Загрузка…' : 'Загрузить ещё'}
-                  </button>
+                  </DrmButton>
                 </div>
               )}
             </>

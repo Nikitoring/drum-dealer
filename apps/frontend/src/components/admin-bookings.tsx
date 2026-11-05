@@ -10,6 +10,15 @@ import {
 } from '@/hooks/use-admin-bookings';
 import { useAdminProducts } from '@/hooks/use-admin-products';
 import { clearAdminToken } from '@/lib/auth';
+import {
+  DrmButton,
+  DrmTable,
+  DrmTableBody,
+  DrmTableCell,
+  DrmTableHead,
+  DrmTableHeaderCell,
+  DrmTableRow,
+} from '@/components/ui';
 import type { Booking, BookingStatus } from '@/types/api';
 
 const labels: Record<BookingStatus, string> = {
@@ -103,14 +112,14 @@ export function AdminBookings() {
       <h1>Заявки на бронирование</h1>
       <div className="booking-tabs">
         {tabs.map(([id, text, status]) => (
-          <button
+          <DrmButton
             aria-pressed={filter === status}
             key={id}
             onClick={() => setFilter(status)}
             type="button"
           >
             {text} <b>{counts[id] ?? '—'}</b>
-          </button>
+          </DrmButton>
         ))}
       </div>
       {query.isPending ? (
@@ -119,17 +128,17 @@ export function AdminBookings() {
         <p role="alert">{query.error.message}</p>
       ) : (
         <div className="booking-table-wrap">
-          <table className="booking-table">
-            <thead>
-              <tr>
-                <th>Дата и время</th>
-                <th>Точка</th>
-                <th>Клиент</th>
-                <th>Статус</th>
-                <th />
-              </tr>
-            </thead>
-            <tbody>
+          <DrmTable className="booking-table">
+            <DrmTableHead>
+              <DrmTableRow>
+                <DrmTableHeaderCell>Дата и время</DrmTableHeaderCell>
+                <DrmTableHeaderCell>Точка</DrmTableHeaderCell>
+                <DrmTableHeaderCell>Клиент</DrmTableHeaderCell>
+                <DrmTableHeaderCell>Статус</DrmTableHeaderCell>
+                <DrmTableHeaderCell />
+              </DrmTableRow>
+            </DrmTableHead>
+            <DrmTableBody>
               {bookings.map((booking) => (
                 <BookingRow
                   booking={booking}
@@ -138,8 +147,8 @@ export function AdminBookings() {
                   updateStatus={updateStatus.mutate}
                 />
               ))}
-            </tbody>
-          </table>
+            </DrmTableBody>
+          </DrmTable>
           {!bookings.length && <p>Заявок нет.</p>}
         </div>
       )}
@@ -157,22 +166,22 @@ function BookingRow({
   isUpdating: boolean;
 }) {
   return (
-    <tr>
-      <td>{formatBookingDate(booking)}</td>
-      <td>{booking.timeSlot.rehearsalPoint.name}</td>
-      <td>
+    <DrmTableRow>
+      <DrmTableCell>{formatBookingDate(booking)}</DrmTableCell>
+      <DrmTableCell>{booking.timeSlot.rehearsalPoint.name}</DrmTableCell>
+      <DrmTableCell>
         {booking.customerName}
         <small>{booking.customerPhone}</small>
-      </td>
-      <td>
+      </DrmTableCell>
+      <DrmTableCell>
         <span className={`status-pill ${booking.status.toLowerCase()}`}>
           {labels[booking.status]}
         </span>
-      </td>
-      <td>
+      </DrmTableCell>
+      <DrmTableCell>
         {booking.status === 'PENDING' && (
           <div className="table-actions">
-            <button
+            <DrmButton
               aria-label="Подтвердить"
               className="table-action accept"
               disabled={isUpdating}
@@ -180,8 +189,8 @@ function BookingRow({
               type="button"
             >
               ✓
-            </button>
-            <button
+            </DrmButton>
+            <DrmButton
               aria-label="Отклонить"
               className="table-action reject"
               disabled={isUpdating}
@@ -189,11 +198,11 @@ function BookingRow({
               type="button"
             >
               ×
-            </button>
+            </DrmButton>
           </div>
         )}
-      </td>
-    </tr>
+      </DrmTableCell>
+    </DrmTableRow>
   );
 }
 
@@ -235,7 +244,7 @@ export function AdminPanel({
             </Link>
           ))}
         </nav>
-        <button
+        <DrmButton
           className="admin-logout"
           onClick={() => {
             clearAdminToken();
@@ -244,7 +253,7 @@ export function AdminPanel({
           type="button"
         >
           ⌕ &nbsp; Выход
-        </button>
+        </DrmButton>
       </aside>
       <div className="admin-main">
         <header className="admin-topbar">

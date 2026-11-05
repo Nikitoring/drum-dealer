@@ -1,0 +1,31 @@
+.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 48px;
+  padding: 0 24px;
+  border: 2px solid transparent;
+  border-radius: 9px;
+  font-weight: 800;
+  transition:
+    transform 0.15s ease,
+    background-color 0.15s ease;
+}
+.button:hover {
+  transform: translateY(-2px);
+}
+.button-red {
+  background: var(--red);
+  color: white;
+  box-shadow: 0 2px 0 rgba(23, 23, 23, 0.14);
+}
+.button-red:hover {
+  background: #b92318;
+}
+.button-dark {
+  background: var(--ink);
+  color: var(--paper);
+}
+.button-outline {
+  border-color: currentColor;
+}

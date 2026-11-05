@@ -4,6 +4,18 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState, type FormEvent } from 'react';
 import {
+  DrmButton,
+  DrmInput,
+  DrmSelect,
+  DrmTable,
+  DrmTableBody,
+  DrmTableCell,
+  DrmTableHead,
+  DrmTableHeaderCell,
+  DrmTableRow,
+  DrmTextarea,
+} from '@/components/ui';
+import {
   useAdminProduct,
   useAdminProducts,
   useCreateProduct,
@@ -38,18 +50,18 @@ export function AdminProducts() {
     <>
       <div className="flex items-center justify-between gap-4">
         <h1>Товары</h1>
-        <Link className="button button-red" href="/admin/products/new">
+        <DrmButton className="button-red" href="/admin/products/new">
           Добавить товар
-        </Link>
+        </DrmButton>
       </div>
       <div className="mt-8 flex flex-wrap gap-4">
-        <input
+        <DrmInput
           aria-label="Поиск товаров"
           onChange={(event) => setSearch(event.target.value)}
           placeholder="Поиск…"
           value={search}
         />
-        <select
+        <DrmSelect
           aria-label="Статус товара"
           onChange={(event) => setStatus(event.target.value as ProductStatus | 'all')}
           value={status}
@@ -58,24 +70,24 @@ export function AdminProducts() {
           <option value="AVAILABLE">В наличии</option>
           <option value="SOLD">Продан</option>
           <option value="HIDDEN">Скрыт</option>
-        </select>
+        </DrmSelect>
       </div>
       {productsQuery.isPending ? <p role="status">Загружаем товары…</p> : null}
       {productsQuery.isError ? <p role="alert">{productsQuery.error.message}</p> : null}
       {!productsQuery.isPending && !products.length ? <p>Товары не найдены.</p> : null}
       {products.length > 0 && (
         <div className="booking-table-wrap mt-6">
-          <table className="booking-table">
-            <thead>
-              <tr>
-                <th>Товар</th>
-                <th>Категория</th>
-                <th>Цена</th>
-                <th>Статус</th>
-                <th />
-              </tr>
-            </thead>
-            <tbody>
+          <DrmTable className="booking-table">
+            <DrmTableHead>
+              <DrmTableRow>
+                <DrmTableHeaderCell>Товар</DrmTableHeaderCell>
+                <DrmTableHeaderCell>Категория</DrmTableHeaderCell>
+                <DrmTableHeaderCell>Цена</DrmTableHeaderCell>
+                <DrmTableHeaderCell>Статус</DrmTableHeaderCell>
+                <DrmTableHeaderCell />
+              </DrmTableRow>
+            </DrmTableHead>
+            <DrmTableBody>
               {products.map((product) => (
                 <ProductRow
                   key={product.id ?? product.slug}
@@ -84,19 +96,19 @@ export function AdminProducts() {
                   deleting={deleteProduct.isPending}
                 />
               ))}
-            </tbody>
-          </table>
+            </DrmTableBody>
+          </DrmTable>
         </div>
       )}
       {productsQuery.hasNextPage && (
-        <button
-          className="button button-outline-red mt-6"
+        <DrmButton
+          className="button-outline-red mt-6"
           disabled={productsQuery.isFetchingNextPage}
           onClick={() => productsQuery.fetchNextPage()}
           type="button"
         >
           Загрузить ещё
-        </button>
+        </DrmButton>
       )}
     </>
   );
@@ -112,14 +124,14 @@ function ProductRow({
   deleting: boolean;
 }) {
   return (
-    <tr>
-      <td>
+    <DrmTableRow>
+      <DrmTableCell>
         <strong>{product.name}</strong>
         <small>{product.brand || 'Без бренда'}</small>
-      </td>
-      <td>{product.category}</td>
-      <td>{new Intl.NumberFormat('ru-RU').format(Number(product.price))} ₽</td>
-      <td>
+      </DrmTableCell>
+      <DrmTableCell>{product.category}</DrmTableCell>
+      <DrmTableCell>{new Intl.NumberFormat('ru-RU').format(Number(product.price))} ₽</DrmTableCell>
+      <DrmTableCell>
         <span className={`status-pill ${product.status.toLowerCase()}`}>
           {product.status === 'AVAILABLE'
             ? 'В наличии'
@@ -127,23 +139,23 @@ function ProductRow({
               ? 'Продан'
               : 'Скрыт'}
         </span>
-      </td>
-      <td>
+      </DrmTableCell>
+      <DrmTableCell>
         <div className="table-actions">
-          <Link className="button button-outline-red" href={`/admin/products/${product.id}/edit`}>
+          <DrmButton className="button-outline-red" href={`/admin/products/${product.id}/edit`}>
             Изменить
-          </Link>
-          <button
+          </DrmButton>
+          <DrmButton
             className="table-action reject"
             disabled={deleting}
             onClick={onDelete}
             type="button"
           >
             ×
-          </button>
+          </DrmButton>
         </div>
-      </td>
-    </tr>
+      </DrmTableCell>
+    </DrmTableRow>
   );
 }
 
@@ -196,7 +208,7 @@ export function AdminProductForm({ id }: { id?: string }) {
       <form className="mt-8 grid max-w-3xl gap-5" onSubmit={submit}>
         <label>
           Название
-          <input
+          <DrmInput
             required
             onChange={(event) => setField('name', event.target.value)}
             value={form.name}
@@ -204,7 +216,7 @@ export function AdminProductForm({ id }: { id?: string }) {
         </label>
         <label>
           Slug
-          <input
+          <DrmInput
             required
             onChange={(event) => setField('slug', event.target.value)}
             value={form.slug}
@@ -212,14 +224,14 @@ export function AdminProductForm({ id }: { id?: string }) {
         </label>
         <label>
           Бренд
-          <input
+          <DrmInput
             onChange={(event) => setField('brand', event.target.value)}
             value={form.brand ?? ''}
           />
         </label>
         <label>
           Категория
-          <input
+          <DrmInput
             required
             onChange={(event) => setField('category', event.target.value)}
             value={form.category}
@@ -227,7 +239,7 @@ export function AdminProductForm({ id }: { id?: string }) {
         </label>
         <label>
           Цена
-          <input
+          <DrmInput
             min="0"
             required
             onChange={(event) => setField('price', event.target.value)}
@@ -237,28 +249,28 @@ export function AdminProductForm({ id }: { id?: string }) {
         </label>
         <label>
           Состояние
-          <select
+          <DrmSelect
             onChange={(event) => setField('condition', event.target.value as ProductCondition)}
             value={form.condition}
           >
             <option value="NEW">Новый</option>
             <option value="USED">Б/у</option>
-          </select>
+          </DrmSelect>
         </label>
         <label>
           Статус
-          <select
+          <DrmSelect
             onChange={(event) => setField('status', event.target.value as ProductStatus)}
             value={form.status}
           >
             <option value="AVAILABLE">В наличии</option>
             <option value="SOLD">Продан</option>
             <option value="HIDDEN">Скрыт</option>
-          </select>
+          </DrmSelect>
         </label>
         <label>
           Описание
-          <textarea
+          <DrmTextarea
             onChange={(event) => setField('description', event.target.value)}
             rows={5}
             value={form.description ?? ''}
@@ -266,7 +278,7 @@ export function AdminProductForm({ id }: { id?: string }) {
         </label>
         <label>
           Характеристики (JSON)
-          <textarea
+          <DrmTextarea
             onChange={(event) => {
               try {
                 setField('specifications', JSON.parse(event.target.value || '{}'));
@@ -279,13 +291,13 @@ export function AdminProductForm({ id }: { id?: string }) {
           />
         </label>
         {error && <p role="alert">{error}</p>}
-        <button
-          className="button button-red"
+        <DrmButton
+          className="button-red"
           disabled={createProduct.isPending || updateProduct.isPending}
           type="submit"
         >
           {createProduct.isPending || updateProduct.isPending ? 'Сохраняем…' : 'Сохранить'}
-        </button>
+        </DrmButton>
       </form>
       {id && product && (
         <ProductImages
@@ -313,7 +325,7 @@ function ProductImages({
   return (
     <section className="mt-10 max-w-3xl">
       <h2>Изображения</h2>
-      <input
+      <DrmInput
         accept="image/png,image/jpeg,image/webp"
         disabled={uploadImage.isPending || product.images.length >= 10}
         onChange={(event) => {
@@ -327,7 +339,7 @@ function ProductImages({
         {product.images.map((image) => (
           <div key={image.id} className="relative">
             <img alt="" className="h-24 w-24 object-cover" src={image.url} />
-            <input
+            <DrmInput
               aria-label={`Позиция изображения ${(image.position ?? 0) + 1}`}
               className="w-16"
               defaultValue={image.position ?? 0}
@@ -340,7 +352,7 @@ function ProductImages({
               }
               type="number"
             />
-            <button
+            <DrmButton
               aria-label="Удалить изображение"
               className="table-action reject"
               disabled={deleteImage.isPending}
@@ -348,7 +360,7 @@ function ProductImages({
               type="button"
             >
               ×
-            </button>
+            </DrmButton>
           </div>
         ))}
       </div>

@@ -2,6 +2,7 @@
 
 import Image from 'next/image';
 import Link from 'next/link';
+import { DrmButton } from '@/components/ui';
 import { useState } from 'react';
 import { useProduct, useRelatedProducts } from '@/hooks/use-products';
 
@@ -56,29 +57,29 @@ export function ProductDetail({ slug }: { slug: string }) {
             />
             {photos.length > 1 && (
               <>
-                <button
+                <DrmButton
                   aria-label="Предыдущее фото"
                   className="gallery-arrow prev"
                   onClick={() => updatePhoto(-1)}
                   type="button"
                 >
                   ‹
-                </button>
-                <button
+                </DrmButton>
+                <DrmButton
                   aria-label="Следующее фото"
                   className="gallery-arrow next"
                   onClick={() => updatePhoto(1)}
                   type="button"
                 >
                   ›
-                </button>
+                </DrmButton>
               </>
             )}
           </div>
           {photos.length > 1 && (
             <div aria-label="Фотографии товара" className="gallery-thumbs">
               {photos.map((photo, index) => (
-                <button
+                <DrmButton
                   aria-label={`Показать фото ${index + 1}`}
                   aria-pressed={photoIndex === index}
                   key={`${photo}-${index}`}
@@ -86,7 +87,7 @@ export function ProductDetail({ slug }: { slug: string }) {
                   type="button"
                 >
                   <Image alt="" height={314} src={photo} unoptimized width={310} />
-                </button>
+                </DrmButton>
               ))}
             </div>
           )}

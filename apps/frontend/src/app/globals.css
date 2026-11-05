@@ -155,37 +155,6 @@ h6 {
 .footer-nav a:hover {
   color: var(--red);
 }
-.button {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  min-height: 48px;
-  padding: 0 24px;
-  border: 2px solid transparent;
-  border-radius: 9px;
-  font-weight: 800;
-  transition:
-    transform 0.15s ease,
-    background-color 0.15s ease;
-}
-.button:hover {
-  transform: translateY(-2px);
-}
-.button-red {
-  background: var(--red);
-  color: white;
-  box-shadow: 0 2px 0 rgba(23, 23, 23, 0.14);
-}
-.button-red:hover {
-  background: #b92318;
-}
-.button-dark {
-  background: var(--ink);
-  color: var(--paper);
-}
-.button-outline {
-  border-color: currentColor;
-}
 .site-footer {
   width: min(100% - 48px, 1392px);
   margin-inline: auto;
@@ -643,9 +612,6 @@ h6 {
   align-items: center;
   font-size: 13px;
   line-height: 1.2;
-}
-.catalog-filters input {
-  accent-color: var(--red);
 }
 .filter-reset {
   min-height: 40px;
@@ -1402,33 +1368,6 @@ h6 {
 }
 .booking-tabs button[aria-pressed='true'] b {
   color: white;
-}
-.booking-table-wrap {
-  overflow-x: auto;
-  border-top: 1px solid rgba(23, 23, 23, 0.16);
-}
-.booking-table {
-  width: 100%;
-  min-width: 680px;
-  border-collapse: collapse;
-  text-align: left;
-}
-.booking-table th,
-.booking-table td {
-  padding: 18px 12px;
-  border-bottom: 1px solid rgba(23, 23, 23, 0.14);
-  vertical-align: middle;
-}
-.booking-table th {
-  font-size: 14px;
-}
-.booking-table td {
-  font-size: 14px;
-}
-.booking-table td small {
-  display: block;
-  margin-top: 5px;
-  color: var(--gray);
 }
 .status-pill.pending {
   background: #f6df9c;

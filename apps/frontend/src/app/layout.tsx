@@ -1,6 +1,12 @@
 import type { Metadata } from 'next';
 import localFont from 'next/font/local';
 import { Inter, Manrope, Oswald } from 'next/font/google';
+import '@/components/ui/drm-button.css';
+import '@/components/ui/drm-checkbox.css';
+import '@/components/ui/drm-input.css';
+import '@/components/ui/drm-select.css';
+import '@/components/ui/drm-table.css';
+import '@/components/ui/drm-textarea.css';
 import './globals.css';
 import { QueryProvider } from '@/components/query-provider';
 

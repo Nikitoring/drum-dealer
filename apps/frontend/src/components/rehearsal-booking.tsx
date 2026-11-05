@@ -3,6 +3,7 @@
 import { useEffect, useState, type FormEvent } from 'react';
 import { useCreateBooking, useRehearsalSlots } from '@/hooks/use-rehearsal';
 import { useBookingStore } from '@/stores/booking-store';
+import { DrmButton, DrmCheckbox, DrmInput, DrmTextarea } from '@/components/ui';
 
 const localDateString = (date: Date) =>
   `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
@@ -86,7 +87,7 @@ export function RehearsalBooking({ pointId, pointSlug }: { pointId: string; poin
       <div className="booking-picker">
         <div className="calendar">
           <div className="calendar-head">
-            <button
+            <DrmButton
               aria-label="Предыдущий месяц"
               onClick={() =>
                 setMonth((current) => new Date(current.getFullYear(), current.getMonth() - 1, 1))
@@ -94,9 +95,9 @@ export function RehearsalBooking({ pointId, pointSlug }: { pointId: string; poin
               type="button"
             >
               ‹
-            </button>
+            </DrmButton>
             <span>{monthLabel}</span>
-            <button
+            <DrmButton
               aria-label="Следующий месяц"
               onClick={() =>
                 setMonth((current) => new Date(current.getFullYear(), current.getMonth() + 1, 1))
@@ -104,7 +105,7 @@ export function RehearsalBooking({ pointId, pointSlug }: { pointId: string; poin
               type="button"
             >
               ›
-            </button>
+            </DrmButton>
           </div>
           <div aria-label={`Календарь: ${monthLabel}`} className="calendar-grid" role="group">
             {['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс'].map((day) => (
@@ -116,7 +117,7 @@ export function RehearsalBooking({ pointId, pointSlug }: { pointId: string; poin
               const value = localDateString(date);
               const isPast = value < localDateString(new Date());
               return (
-                <button
+                <DrmButton
                   aria-label={new Intl.DateTimeFormat('ru-RU', {
                     dateStyle: 'full',
                   }).format(date)}
@@ -132,7 +133,7 @@ export function RehearsalBooking({ pointId, pointSlug }: { pointId: string; poin
                   type="button"
                 >
                   {day}
-                </button>
+                </DrmButton>
               );
             })}
           </div>
@@ -144,7 +145,7 @@ export function RehearsalBooking({ pointId, pointSlug }: { pointId: string; poin
             <p role="alert">Не удалось загрузить расписание.</p>
           ) : availableSlots.length ? (
             availableSlots.map((slot) => (
-              <button
+              <DrmButton
                 aria-pressed={selectedSlotId === slot.id}
                 className="slot-button"
                 key={slot.id}
@@ -164,19 +165,19 @@ export function RehearsalBooking({ pointId, pointSlug }: { pointId: string; poin
                   hour: '2-digit',
                   minute: '2-digit',
                 })}
-              </button>
+              </DrmButton>
             ))
           ) : (
             <p>На эту дату свободных слотов нет.</p>
           )}
-          <button
+          <DrmButton
             className="button button-red"
             disabled={!selectedSlot}
             onClick={() => setShowForm((visible) => !visible)}
             type="button"
           >
             Записаться <span aria-hidden="true">→</span>
-          </button>
+          </DrmButton>
         </div>
       </div>
 
@@ -190,31 +191,30 @@ export function RehearsalBooking({ pointId, pointSlug }: { pointId: string; poin
           </h3>
           <label>
             Ваше имя
-            <input autoComplete="name" name="name" required />
+            <DrmInput autoComplete="name" name="name" required />
           </label>
           <label>
             Телефон
-            <input autoComplete="tel" name="phone" required type="tel" />
+            <DrmInput autoComplete="tel" name="phone" required type="tel" />
           </label>
           <label>
             Email (необязательно)
-            <input autoComplete="email" name="email" type="email" />
+            <DrmInput autoComplete="email" name="email" type="email" />
           </label>
           <label>
             Комментарий
-            <textarea name="comment" rows={3} />
+            <DrmTextarea name="comment" rows={3} />
           </label>
           <label className="consent">
-            <input name="consent" required type="checkbox" /> Согласен на обработку персональных
-            данных
+            <DrmCheckbox name="consent" required /> Согласен на обработку персональных данных
           </label>
-          <button
-            className="button button-red"
+          <DrmButton
+            className="button-red"
             disabled={bookingMutation.isPending || bookingMutation.isSuccess}
             type="submit"
           >
             {bookingMutation.isPending ? 'Отправляем…' : 'Отправить заявку'}
-          </button>
+          </DrmButton>
           {(formError || bookingMutation.error) && (
             <p role="alert">
               {formError || bookingMutation.error?.message || 'Не удалось отправить заявку.'}
