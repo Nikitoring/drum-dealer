@@ -1,0 +1,412 @@
+/* Booking */
+.booking-hero {
+  position: relative;
+  min-height: 320px;
+  display: grid;
+  grid-template-columns: 50% 50%;
+  overflow: hidden;
+}
+.booking-hero-copy {
+  position: relative;
+  z-index: 1;
+  align-self: center;
+  padding: 38px clamp(25px, 5vw, 64px);
+}
+.booking-hero-copy h1 {
+  margin: 0;
+  font-family: var(--heading-font);
+  font-size: clamp(48px, 6vw, 78px);
+  line-height: 0.9;
+}
+.booking-hero-copy .booking-lead {
+  max-width: 370px;
+  margin: 16px 0 22px;
+  font-size: clamp(20px, 2.2vw, 28px);
+  line-height: 1.12;
+}
+.point-details {
+  display: grid;
+  gap: 11px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-weight: 700;
+}
+.point-details li {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.detail-icon {
+  display: inline-grid;
+  width: 26px;
+  height: 26px;
+  place-items: center;
+  font-size: 21px;
+}
+.detail-icon svg {
+  width: 22px;
+  height: 22px;
+}
+.booking-hero-art {
+  position: relative;
+  min-height: 320px;
+  overflow: hidden;
+  background: var(--paper);
+  clip-path: polygon(13% 0, 100% 0, 100% 100%, 0 100%);
+}
+.booking-hero-art .rising-sun-half {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+}
+.booking-hero-art img {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  object-position: center bottom;
+}
+.booking-area {
+  padding: 36px clamp(24px, 4vw, 50px) 48px;
+}
+.booking-area h2 {
+  margin: 0 0 22px;
+  font-family: var(--heading-font);
+  font-size: 32px;
+}
+.booking-picker {
+  display: grid;
+  grid-template-columns: minmax(0, 1.15fr) minmax(260px, 0.85fr);
+  gap: clamp(24px, 5vw, 64px);
+}
+.calendar {
+  padding: 16px;
+  border: 1px solid rgba(23, 23, 23, 0.13);
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.2);
+  box-shadow: 0 2px 10px rgba(23, 23, 23, 0.06);
+}
+.calendar-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+  font-family: var(--heading-font);
+  font-size: 23px;
+}
+.calendar-head button {
+  width: 40px;
+  height: 40px;
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  font-size: 27px;
+  cursor: pointer;
+}
+.calendar-grid {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: 5px;
+  text-align: center;
+}
+.calendar-grid > span {
+  padding: 8px 0;
+  font-size: 14px;
+  font-weight: 800;
+}
+.calendar-grid button {
+  justify-self: center;
+  width: min(44px, 100%);
+  aspect-ratio: 1;
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  font-weight: 700;
+  cursor: pointer;
+}
+.calendar-grid button:hover {
+  background: rgba(213, 43, 30, 0.12);
+}
+.calendar-grid button.is-weekend {
+  color: var(--red);
+}
+.calendar-grid button[aria-pressed='true'] {
+  background: var(--red);
+  color: white;
+}
+.slot-list {
+  display: grid;
+  align-content: start;
+  gap: 11px;
+}
+.slot-button {
+  min-height: 52px;
+  border: 1px solid rgba(23, 23, 23, 0.17);
+  border-radius: 9px;
+  background: rgba(255, 255, 255, 0.24);
+  font-size: 18px;
+  font-weight: 700;
+  cursor: pointer;
+}
+.slot-button[aria-pressed='true'] {
+  border-color: var(--red);
+  background: var(--red);
+  color: white;
+}
+.slot-button:disabled {
+  color: #8c8984;
+  text-decoration: line-through;
+  cursor: not-allowed;
+}
+.slot-list > .button:disabled {
+  opacity: 0.48;
+  cursor: not-allowed;
+  transform: none;
+}
+.slot-list .button {
+  min-height: 68px;
+  margin-top: 8px;
+  font-size: 21px;
+}
+.booking-form {
+  display: grid;
+  gap: 14px;
+  max-width: 520px;
+  margin: 28px auto 0;
+  padding: 22px;
+  border: 1px solid rgba(23, 23, 23, 0.18);
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.25);
+}
+.booking-modal-backdrop {
+  position: fixed;
+  z-index: 20;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+  background: rgba(23, 23, 23, 0.62);
+}
+.booking-modal {
+  position: relative;
+  width: min(100%, 560px);
+  max-height: calc(100vh - 48px);
+  overflow: auto;
+  border-radius: 12px;
+  background: var(--paper);
+  box-shadow: 0 18px 60px rgba(23, 23, 23, 0.28);
+}
+.booking-modal .booking-form {
+  max-width: none;
+  margin: 0;
+  border: 0;
+  border-radius: 12px;
+  background: transparent;
+  box-shadow: none;
+}
+.booking-modal-close {
+  position: absolute;
+  z-index: 1;
+  top: 14px;
+  right: 14px;
+  width: 36px;
+  min-height: 36px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--ink);
+}
+.booking-modal-close svg {
+  width: 22px;
+  height: 22px;
+}
+.booking-form-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+.booking-form-actions .button {
+  flex: 1 1 180px;
+}
+.booking-form h3 {
+  margin: 0;
+  font-size: 20px;
+}
+.booking-form label {
+  display: grid;
+  gap: 6px;
+  font-weight: 700;
+}
+.booking-form label input:not([type='checkbox']),
+.booking-form label textarea {
+  min-height: 44px;
+  padding: 8px 10px;
+  border: 1px solid rgba(23, 23, 23, 0.25);
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.5);
+}
+.booking-form .consent {
+  display: flex;
+  align-items: flex-start;
+  font-size: 14px;
+}
+.booking-form p {
+  margin: 0;
+  color: #28623a;
+  font-weight: 700;
+}
+.points-page {
+  padding: clamp(28px, 5vw, 64px);
+}
+.points-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 22px;
+  margin-top: 32px;
+}
+.point-card {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(180px, 0.9fr);
+  overflow: hidden;
+  border: 1px solid rgba(23, 23, 23, 0.15);
+  border-radius: 9px;
+  background: rgba(255, 255, 255, 0.23);
+}
+.point-card-art {
+  position: relative;
+  min-height: 270px;
+  overflow: hidden;
+  background: var(--paper);
+}
+.point-card-art .rising-sun-half {
+  position: absolute;
+  inset: 0;
+}
+.point-card-art img {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  object-position: center bottom;
+}
+.point-card > div:last-child {
+  align-self: center;
+  padding: 24px;
+}
+.point-card h2 {
+  margin: 10px 0;
+  font-family: var(--heading-font);
+  font-size: 32px;
+}
+.point-card p:not(.eyebrow) {
+  margin: 0 0 20px;
+}
+.empty-bookings {
+  padding: 20px 12px;
+  color: var(--gray);
+}
+
+.rising-sun-half {
+  width: 100%;
+  height: 100%;
+  background: repeating-conic-gradient(
+    at 50% 100%,
+    var(--red) 0deg 11.25deg,
+    var(--paper) 11.25deg 22.5deg
+  );
+  transform: rotate(0deg);
+}
+
+@media (max-width: 640px) {
+  .booking-hero {
+    grid-template-columns: 1fr;
+  }
+  .booking-hero-copy {
+    padding: 32px 22px;
+  }
+  .booking-hero-copy h1 {
+    font-size: 56px;
+  }
+  .booking-hero-copy .booking-lead {
+    margin: 12px 0 18px;
+    font-size: 21px;
+  }
+  .booking-hero-art {
+    min-height: 225px;
+    clip-path: none;
+  }
+  .booking-area {
+    padding: 28px 16px 34px;
+  }
+  .booking-modal-backdrop {
+    padding: 0;
+  }
+  .booking-modal,
+  .booking-modal .booking-form {
+    width: 100%;
+    max-height: none;
+    min-height: 100%;
+    border-radius: 0;
+  }
+  .booking-modal .booking-form {
+    align-content: start;
+    padding: 24px 18px;
+  }
+  .booking-area h2 {
+    font-size: 27px;
+  }
+  .booking-picker {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+  .calendar {
+    padding: 10px;
+  }
+  .calendar-head {
+    font-size: 20px;
+  }
+  .calendar-grid {
+    gap: 2px;
+  }
+  .calendar-grid button {
+    width: 36px;
+  }
+  .slot-list {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .slot-list .button {
+    grid-column: 1 / -1;
+  }
+  .points-page {
+    padding: 26px 18px;
+  }
+  .points-grid {
+    grid-template-columns: 1fr;
+    gap: 14px;
+    margin-top: 22px;
+  }
+  .point-card {
+    grid-template-columns: 38% 1fr;
+  }
+  .point-card-art {
+    min-height: 200px;
+  }
+  .point-card > div:last-child {
+    padding: 14px;
+  }
+  .point-card h2 {
+    font-size: 24px;
+  }
+  .point-card .button {
+    min-height: 40px;
+    padding-inline: 12px;
+    font-size: 13px;
+  }
+  .booking-table-wrap {
+    margin-inline: -16px;
+    padding-inline: 16px;
+  }
+}

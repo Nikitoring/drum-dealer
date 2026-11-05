@@ -1,7 +1,8 @@
 'use client';
 
 import Image from 'next/image';
-import { RehearsalBooking } from '@/components/rehearsal-booking';
+import { MapPin, SixteenthNotes, Phone } from 'lucide-react';
+import { RehearsalBooking } from '@/components/rehearsal';
 import { useRehearsalPoint } from '@/hooks/use-rehearsal';
 
 export function RehearsalPointDetail({ slug }: { slug: string }) {
@@ -29,7 +30,7 @@ export function RehearsalPointDetail({ slug }: { slug: string }) {
           <ul className="point-details">
             <li>
               <span className="detail-icon" aria-hidden="true">
-                ●
+                <MapPin />
               </span>
               {point.address}
             </li>
@@ -44,7 +45,7 @@ export function RehearsalPointDetail({ slug }: { slug: string }) {
             {point.contactPhone && (
               <li>
                 <span className="detail-icon" aria-hidden="true">
-                  ☎
+                  <Phone />
                 </span>
                 {point.contactPhone}
               </li>
@@ -52,7 +53,7 @@ export function RehearsalPointDetail({ slug }: { slug: string }) {
             {point.equipment && (
               <li>
                 <span className="detail-icon" aria-hidden="true">
-                  ♫
+                  <SixteenthNotes />
                 </span>
                 {point.equipment}
               </li>
@@ -60,12 +61,13 @@ export function RehearsalPointDetail({ slug }: { slug: string }) {
           </ul>
         </div>
         <div className="booking-hero-art">
+          <div aria-hidden="true" className="rising-sun-half" />
           <Image
             alt="Репетиционная комната с музыкальным оборудованием"
             fill
             priority
             sizes="(max-width:640px) 100vw, 50vw"
-            src="/design/05-rehearsal-building.png"
+            src="/design/illustrations/03-building.png"
           />
         </div>
       </div>

@@ -1,5 +1,4 @@
-import { AdminPanel } from '@/components/admin-bookings';
-import { AdminProductForm } from '@/components/admin-products';
+import { AdminPanel, AdminProductForm } from '@/components/admin';
 
 export default function NewProductPage() {
   return (

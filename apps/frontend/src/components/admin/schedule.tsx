@@ -27,7 +27,7 @@ export function AdminSchedule() {
     () =>
       Array.from({ length: 7 }, (_, index) => {
         const date = new Date();
-        date.setHours(12, 0, 0, 0);
+        date.setHours(10, 0, 0, 0);
         date.setDate(date.getDate() + index);
         return date;
       }),
@@ -35,7 +35,7 @@ export function AdminSchedule() {
   );
   const [selectedDate, setSelectedDate] = useState(dayKey(dates[0]));
   const [pointId, setPointId] = useState('all');
-  const [newSlotTime, setNewSlotTime] = useState('12:00');
+  const [newSlotTime, setNewSlotTime] = useState('10:00');
   const schedule = useAdminSchedule(isoStart(selectedDate), isoEnd(selectedDate));
   const mutations = useAdminScheduleMutations();
   const points =

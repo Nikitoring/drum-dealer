@@ -15,7 +15,7 @@ export default function CatalogPage() {
             height={314}
             priority
             sizes="35vw"
-            src="/design/04-snare-drum.png"
+            src="/design/illustrations/04-snare-drum.png"
             width={312}
           />
         </div>

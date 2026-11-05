@@ -1,4 +1,4 @@
-import { AdminDashboard, AdminPanel } from '@/components/admin-bookings';
+import { AdminDashboard, AdminPanel } from '@/components/admin';
 
 export default function AdminDashboardPage() {
   return (

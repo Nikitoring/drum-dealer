@@ -7,12 +7,15 @@ type DrmButtonProps =
 
 export function DrmButton(props: DrmButtonProps) {
   const className = ['button', props.className].filter(Boolean).join(' ');
+  const ariaLabel = 'aria-label' in props ? props['aria-label'] : undefined;
+  const title = 'title' in props ? props.title : undefined;
+  const tooltipProps = ariaLabel && !title ? { title: ariaLabel } : {};
 
   if (props.href !== undefined) {
     const { href, ...linkProps } = props;
-    return <Link {...linkProps} className={className} href={href} />;
+    return <Link {...linkProps} {...tooltipProps} className={className} href={href} />;
   }
 
   const { href: _href, ...buttonProps } = props;
-  return <button {...buttonProps} className={className} />;
+  return <button {...buttonProps} {...tooltipProps} className={className} />;
 }

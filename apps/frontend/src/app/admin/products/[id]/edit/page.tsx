@@ -1,5 +1,4 @@
-import { AdminPanel } from '@/components/admin-bookings';
-import { AdminProductForm } from '@/components/admin-products';
+import { AdminPanel, AdminProductForm } from '@/components/admin';
 
 export default async function EditProductPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;

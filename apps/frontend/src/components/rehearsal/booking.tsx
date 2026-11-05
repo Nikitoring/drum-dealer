@@ -1,9 +1,11 @@
 'use client';
 
-import { useEffect, useState, type FormEvent } from 'react';
-import { useCreateBooking, useRehearsalSlots } from '@/hooks/use-rehearsal';
+import { useEffect, useState } from 'react';
+import { ChevronLeft, ChevronRight, X } from 'lucide-react';
+import { useRehearsalSlots } from '@/hooks/use-rehearsal';
 import { useBookingStore } from '@/stores/booking-store';
-import { DrmButton, DrmCheckbox, DrmInput, DrmTextarea } from '@/components/ui';
+import { DrmButton } from '@/components/ui';
+import { RehearsalBookingForm } from './booking-form';
 
 const localDateString = (date: Date) =>
   `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
@@ -26,7 +28,6 @@ export function RehearsalBooking({ pointId, pointSlug }: { pointId: string; poin
     return new Date(date.getFullYear(), date.getMonth(), 1);
   });
   const [showForm, setShowForm] = useState(false);
-  const [formError, setFormError] = useState('');
 
   useEffect(() => {
     if (selectedPointId !== pointId) setPoint(pointId);
@@ -40,10 +41,10 @@ export function RehearsalBooking({ pointId, pointSlug }: { pointId: string; poin
     to,
     selectedPointId === pointId,
   );
-  const bookingMutation = useCreateBooking(pointSlug, selectedDate);
-
   const availableSlots = (slotsQuery.data ?? []).filter((slot) => slot.status === 'AVAILABLE');
   const selectedSlot = availableSlots.find((slot) => slot.id === selectedSlotId);
+  const isBookingDisabled = availableSlots.length === 0 || !selectedSlot;
+
   useEffect(() => {
     if (selectedSlotId && !availableSlots.some((slot) => slot.id === selectedSlotId)) setSlot(null);
   }, [availableSlots, selectedSlotId, setSlot]);
@@ -59,27 +60,6 @@ export function RehearsalBooking({ pointId, pointSlug }: { pointId: string; poin
     month: 'long',
     year: 'numeric',
   }).format(month);
-  const selectedDateLabel = new Intl.DateTimeFormat('ru-RU', {
-    day: 'numeric',
-    month: 'long',
-  }).format(dateFromString(selectedDate));
-
-  function submitBooking(event: FormEvent<HTMLFormElement>) {
-    event.preventDefault();
-    if (!selectedSlot) {
-      setFormError('Выберите свободное время.');
-      return;
-    }
-    const form = new FormData(event.currentTarget);
-    bookingMutation.mutate({
-      timeSlotId: selectedSlot.id,
-      customerName: String(form.get('name')),
-      customerPhone: String(form.get('phone')),
-      customerEmail: String(form.get('email') || '') || undefined,
-      comment: String(form.get('comment') || '') || undefined,
-      personalDataConsent: form.get('consent') === 'on',
-    });
-  }
 
   return (
     <section className="booking-area" aria-labelledby="booking-title">
@@ -94,7 +74,7 @@ export function RehearsalBooking({ pointId, pointSlug }: { pointId: string; poin
               }
               type="button"
             >
-              ‹
+              <ChevronLeft aria-hidden="true" />
             </DrmButton>
             <span>{monthLabel}</span>
             <DrmButton
@@ -104,7 +84,7 @@ export function RehearsalBooking({ pointId, pointSlug }: { pointId: string; poin
               }
               type="button"
             >
-              ›
+              <ChevronRight aria-hidden="true" />
             </DrmButton>
           </div>
           <div aria-label={`Календарь: ${monthLabel}`} className="calendar-grid" role="group">
@@ -118,17 +98,15 @@ export function RehearsalBooking({ pointId, pointSlug }: { pointId: string; poin
               const isPast = value < localDateString(new Date());
               return (
                 <DrmButton
-                  aria-label={new Intl.DateTimeFormat('ru-RU', {
-                    dateStyle: 'full',
-                  }).format(date)}
+                  aria-label={new Intl.DateTimeFormat('ru-RU', { dateStyle: 'full' }).format(date)}
                   aria-pressed={selectedDate === value}
                   className={index % 7 > 4 ? 'is-weekend' : ''}
                   disabled={isPast}
                   key={value}
                   onClick={() => {
                     setDate(value);
-                    bookingMutation.reset();
-                    setFormError('');
+                    setSlot(null);
+                    setShowForm(false);
                   }}
                   type="button"
                 >
@@ -151,8 +129,7 @@ export function RehearsalBooking({ pointId, pointSlug }: { pointId: string; poin
                 key={slot.id}
                 onClick={() => {
                   setSlot(slot.id);
-                  bookingMutation.reset();
-                  setFormError('');
+                  setShowForm(false);
                 }}
                 type="button"
               >
@@ -172,8 +149,8 @@ export function RehearsalBooking({ pointId, pointSlug }: { pointId: string; poin
           )}
           <DrmButton
             className="button button-red"
-            disabled={!selectedSlot}
-            onClick={() => setShowForm((visible) => !visible)}
+            disabled={isBookingDisabled}
+            onClick={() => setShowForm(true)}
             type="button"
           >
             Записаться <span aria-hidden="true">→</span>
@@ -181,49 +158,30 @@ export function RehearsalBooking({ pointId, pointSlug }: { pointId: string; poin
         </div>
       </div>
 
-      {showForm && (selectedSlot || bookingMutation.isSuccess) && (
-        <form className="booking-form" onSubmit={submitBooking}>
-          <h3>
-            Заявка на {selectedDateLabel}
-            {selectedSlot
-              ? `, ${new Date(selectedSlot.startAt).toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' })}`
-              : ''}
-          </h3>
-          <label>
-            Ваше имя
-            <DrmInput autoComplete="name" name="name" required />
-          </label>
-          <label>
-            Телефон
-            <DrmInput autoComplete="tel" name="phone" required type="tel" />
-          </label>
-          <label>
-            Email (необязательно)
-            <DrmInput autoComplete="email" name="email" type="email" />
-          </label>
-          <label>
-            Комментарий
-            <DrmTextarea name="comment" rows={3} />
-          </label>
-          <label className="consent">
-            <DrmCheckbox name="consent" required /> Согласен на обработку персональных данных
-          </label>
-          <DrmButton
-            className="button-red"
-            disabled={bookingMutation.isPending || bookingMutation.isSuccess}
-            type="submit"
-          >
-            {bookingMutation.isPending ? 'Отправляем…' : 'Отправить заявку'}
-          </DrmButton>
-          {(formError || bookingMutation.error) && (
-            <p role="alert">
-              {formError || bookingMutation.error?.message || 'Не удалось отправить заявку.'}
-            </p>
-          )}
-          {bookingMutation.isSuccess && (
-            <p role="status">Заявка отправлена. Администратор подтвердит запись.</p>
-          )}
-        </form>
+      {showForm && selectedSlot && (
+        <div
+          aria-labelledby="booking-modal-title"
+          aria-modal="true"
+          className="booking-modal-backdrop"
+          role="dialog"
+        >
+          <div className="booking-modal">
+            <DrmButton
+              aria-label="Закрыть форму записи"
+              className="booking-modal-close"
+              onClick={() => setShowForm(false)}
+              type="button"
+            >
+              <X aria-hidden="true" />
+            </DrmButton>
+            <RehearsalBookingForm
+              date={selectedDate}
+              onClose={() => setShowForm(false)}
+              pointSlug={pointSlug}
+              slot={selectedSlot}
+            />
+          </div>
+        </div>
       )}
     </section>
   );

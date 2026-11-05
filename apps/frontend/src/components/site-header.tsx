@@ -31,7 +31,7 @@ export function SiteHeader() {
         ))}
       </nav>
 
-      <Link className="button button-red header-cta" href="/kovry/kovry-1">
+      <Link className="button button-red header-cta" href="/kovry">
         Записаться
       </Link>
     </header>

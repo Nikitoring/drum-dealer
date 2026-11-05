@@ -15,12 +15,15 @@ export function RehearsalPointsList() {
     <div className="points-grid">
       {points.map((point) => (
         <article className="point-card" key={point.id}>
-          <Image
-            alt="Репетиционное пространство"
-            height={296}
-            src="/design/05-rehearsal-building.png"
-            width={310}
-          />
+          <div className="point-card-art">
+            <div aria-hidden="true" className="rising-sun-half" />
+            <Image
+              alt="Репетиционное пространство"
+              height={296}
+              src="/design/illustrations/03-building.png"
+              width={310}
+            />
+          </div>
           <div>
             <p className="eyebrow">Репетиционная точка</p>
             <h2>{point.name}</h2>

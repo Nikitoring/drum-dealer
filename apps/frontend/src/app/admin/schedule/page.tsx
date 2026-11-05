@@ -1,5 +1,4 @@
-import { AdminPanel } from '@/components/admin-bookings';
-import { AdminSchedule } from '@/components/admin-schedule';
+import { AdminPanel, AdminSchedule } from '@/components/admin';
 
 export default function AdminSchedulePage() {
   return (

@@ -1,13 +1,20 @@
 import type { Metadata } from 'next';
 import localFont from 'next/font/local';
 import { Inter, Manrope, Oswald } from 'next/font/google';
+import './globals.css';
 import '@/components/ui/drm-button.css';
 import '@/components/ui/drm-checkbox.css';
 import '@/components/ui/drm-input.css';
 import '@/components/ui/drm-select.css';
 import '@/components/ui/drm-table.css';
 import '@/components/ui/drm-textarea.css';
-import './globals.css';
+import '@/components/styles/common.css';
+import '@/components/site/styles/site.css';
+import '@/components/home/styles/home.css';
+import '@/components/catalog/styles/catalog.css';
+import '@/components/catalog/styles/product.css';
+import '@/components/rehearsal/styles/rehearsal.css';
+import '@/components/admin/styles/admin.css';
 import { QueryProvider } from '@/components/query-provider';
 
 const inter = Inter({

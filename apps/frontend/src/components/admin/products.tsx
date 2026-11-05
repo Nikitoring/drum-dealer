@@ -54,23 +54,27 @@ export function AdminProducts() {
           Добавить товар
         </DrmButton>
       </div>
-      <div className="mt-8 flex flex-wrap gap-4">
-        <DrmInput
-          aria-label="Поиск товаров"
-          onChange={(event) => setSearch(event.target.value)}
-          placeholder="Поиск…"
-          value={search}
-        />
-        <DrmSelect
-          aria-label="Статус товара"
-          onChange={(event) => setStatus(event.target.value as ProductStatus | 'all')}
-          value={status}
-        >
-          <option value="all">Все статусы</option>
-          <option value="AVAILABLE">В наличии</option>
-          <option value="SOLD">Продан</option>
-          <option value="HIDDEN">Скрыт</option>
-        </DrmSelect>
+      <div className="admin-product-filters mt-8">
+        <label>
+          Поиск товаров
+          <DrmInput
+            onChange={(event) => setSearch(event.target.value)}
+            placeholder="Название, бренд или категория"
+            value={search}
+          />
+        </label>
+        <label>
+          Статус
+          <DrmSelect
+            onChange={(event) => setStatus(event.target.value as ProductStatus | 'all')}
+            value={status}
+          >
+            <option value="all">Все статусы</option>
+            <option value="AVAILABLE">В наличии</option>
+            <option value="SOLD">Продан</option>
+            <option value="HIDDEN">Скрыт</option>
+          </DrmSelect>
+        </label>
       </div>
       {productsQuery.isPending ? <p role="status">Загружаем товары…</p> : null}
       {productsQuery.isError ? <p role="alert">{productsQuery.error.message}</p> : null}
@@ -149,6 +153,8 @@ function ProductRow({
             className="table-action reject"
             disabled={deleting}
             onClick={onDelete}
+            aria-label={`Удалить товар «${product.name}»`}
+            title="Удалить товар"
             type="button"
           >
             ×
@@ -205,7 +211,7 @@ export function AdminProductForm({ id }: { id?: string }) {
     <>
       <Link href="/admin/products">← Товары</Link>
       <h1 className="mt-8">{id ? 'Редактирование товара' : 'Новый товар'}</h1>
-      <form className="mt-8 grid max-w-3xl gap-5" onSubmit={submit}>
+      <form className="admin-product-form mt-8 grid max-w-3xl gap-5" onSubmit={submit}>
         <label>
           Название
           <DrmInput
@@ -290,6 +296,14 @@ export function AdminProductForm({ id }: { id?: string }) {
             value={JSON.stringify(form.specifications ?? {}, null, 2)}
           />
         </label>
+        {id && product && (
+          <ProductImages
+            product={product}
+            uploadImage={uploadImage}
+            deleteImage={deleteImage}
+            updateImagePosition={updateImagePosition}
+          />
+        )}
         {error && <p role="alert">{error}</p>}
         <DrmButton
           className="button-red"
@@ -299,14 +313,6 @@ export function AdminProductForm({ id }: { id?: string }) {
           {createProduct.isPending || updateProduct.isPending ? 'Сохраняем…' : 'Сохранить'}
         </DrmButton>
       </form>
-      {id && product && (
-        <ProductImages
-          product={product}
-          uploadImage={uploadImage}
-          deleteImage={deleteImage}
-          updateImagePosition={updateImagePosition}
-        />
-      )}
     </>
   );
 }
@@ -323,7 +329,7 @@ function ProductImages({
   updateImagePosition: ReturnType<typeof useUpdateProductImagePosition>;
 }) {
   return (
-    <section className="mt-10 max-w-3xl">
+    <section className="product-images-field mt-4 max-w-3xl">
       <h2>Изображения</h2>
       <DrmInput
         accept="image/png,image/jpeg,image/webp"
@@ -357,6 +363,7 @@ function ProductImages({
               className="table-action reject"
               disabled={deleteImage.isPending}
               onClick={() => deleteImage.mutate(image.id!)}
+              title="Удалить изображение"
               type="button"
             >
               ×

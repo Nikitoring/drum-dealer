@@ -1,6 +1,6 @@
 import { SiteFooter } from '@/components/site-footer';
 import { SiteHeader } from '@/components/site-header';
-import { RehearsalPointDetail } from '@/components/rehearsal-point-detail';
+import { RehearsalPointDetail } from '@/components/rehearsal';
 
 export default async function RehearsalPointPage({
   params,
