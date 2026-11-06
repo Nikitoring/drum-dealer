@@ -3,7 +3,6 @@ import { defineConfig } from 'vitest/config';
 
 export default defineConfig({
   resolve: { alias: { '@': path.resolve(__dirname, 'src') } },
-  oxc: { jsx: 'react-jsx' },
   test: {
     environment: 'jsdom',
     globals: true,
