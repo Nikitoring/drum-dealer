@@ -16,6 +16,8 @@ concurrency:
 jobs:
   build-and-push:
     runs-on: ubuntu-latest
+    outputs:
+      image_owner: ${{ steps.owner.outputs.value }}
     steps:
       - uses: actions/checkout@v4
 
@@ -112,7 +114,27 @@ jobs:
           VPS_HOST: ${{ secrets.VPS_HOST }}
           VPS_PORT: ${{ secrets.VPS_PORT }}
           VPS_USER: ${{ secrets.VPS_USER }}
+          GHCR_OWNER: ${{ needs.build-and-push.outputs.image_owner }}
           IMAGE_TAG: ${{ github.sha }}
         run: |
           PORT="${VPS_PORT:-22}"
-          ssh -p "$PORT" "$VPS_USER@$VPS_HOST" "cd /opt/drum-dealer && IMAGE_TAG='$IMAGE_TAG' docker compose --env-file .env.production -f docker-compose.production.yml pull && IMAGE_TAG='$IMAGE_TAG' docker compose --env-file .env.production -f docker-compose.production.yml run --rm migrate && IMAGE_TAG='$IMAGE_TAG' docker compose --env-file .env.production -f docker-compose.production.yml up -d --remove-orphans && docker image prune -f"
+
+          ssh -p "$PORT" "$VPS_USER@$VPS_HOST" \
+            "GHCR_OWNER='$GHCR_OWNER' IMAGE_TAG='$IMAGE_TAG' sh -s" <<'REMOTE'
+          set -eu
+
+          cd /opt/drum-dealer
+          test -f .env.production
+
+          TMP_FILE="$(mktemp)"
+          grep -vE '^(GHCR_OWNER|IMAGE_TAG)=' .env.production > "$TMP_FILE" || true
+          printf 'GHCR_OWNER=%s\nIMAGE_TAG=%s\n' "$GHCR_OWNER" "$IMAGE_TAG" >> "$TMP_FILE"
+          chmod 600 "$TMP_FILE"
+          mv "$TMP_FILE" .env.production
+
+          docker compose --env-file .env.production -f docker-compose.production.yml config --quiet
+          docker compose --env-file .env.production -f docker-compose.production.yml pull
+          docker compose --env-file .env.production -f docker-compose.production.yml run --rm migrate
+          docker compose --env-file .env.production -f docker-compose.production.yml up -d --remove-orphans
+          docker image prune -f
+          REMOTE
