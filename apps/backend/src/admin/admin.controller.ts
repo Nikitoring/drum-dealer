@@ -1,4 +1,15 @@
-import { Body, ConflictException, Controller, Get, NotFoundException, Param, Patch, Post, Query, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  ConflictException,
+  Controller,
+  Get,
+  NotFoundException,
+  Param,
+  Patch,
+  Post,
+  Query,
+  UseGuards,
+} from '@nestjs/common';
 import { IsDateString, IsEmail, IsIn, IsOptional, IsString } from 'class-validator';
 import { AuthGuard } from '../common/auth/auth.guard';
 import { AuthService } from '../common/auth/auth.service';
@@ -30,7 +41,8 @@ export class AdminAuthController {
   }
 
   @UseGuards(AuthGuard)
-  @Get('me') me() {
+  @Get('me')
+  me() {
     return { authenticated: true };
   }
 }
@@ -121,7 +133,8 @@ export class AdminScheduleController {
   async updateSlotStatus(@Param('id') id: string, @Body() dto: ScheduleSlotStatusDto) {
     const slot = await this.prisma.timeSlot.findUnique({ where: { id } });
     if (!slot) throw new NotFoundException();
-    if (!['AVAILABLE', 'BLOCKED'].includes(slot.status)) throw new ConflictException('INVALID_STATUS_TRANSITION');
+    if (!['AVAILABLE', 'BLOCKED'].includes(slot.status))
+      throw new ConflictException('INVALID_STATUS_TRANSITION');
     return this.prisma.timeSlot.update({ where: { id }, data: { status: dto.status } });
   }
 }

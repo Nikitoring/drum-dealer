@@ -1,16 +1,110 @@
-import { BadRequestException, Body, Controller, Delete, Get, Param, Patch, Post, Query, UploadedFile, UseGuards, UseInterceptors, NotFoundException } from "@nestjs/common";
-import { FileInterceptor } from "@nestjs/platform-express";
-import { AuthGuard } from "../common/auth/auth.guard";
-import { ImagePositionDto, ProductQueryDto, CreateProductDto, UpdateProductDto } from "./dto/product.dto";
-import { ProductsService } from "./products.service";
-import { PrismaService } from "../common/prisma/prisma.service";
-import { StorageService } from "../common/storage/storage.service";
-@Controller("products") export class ProductsController { constructor(private readonly service: ProductsService, private readonly prisma: PrismaService) {}
- @Get() list(@Query() q: ProductQueryDto) { return this.service.list(q); } @Get(":slug") bySlug(@Param("slug") slug: string) { return this.service.bySlug(slug); }
+import {
+  BadRequestException,
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Patch,
+  Post,
+  Query,
+  UploadedFile,
+  UseGuards,
+  UseInterceptors,
+  NotFoundException,
+} from '@nestjs/common';
+import { FileInterceptor } from '@nestjs/platform-express';
+import { AuthGuard } from '../common/auth/auth.guard';
+import {
+  ImagePositionDto,
+  ProductQueryDto,
+  CreateProductDto,
+  UpdateProductDto,
+} from './dto/product.dto';
+import { ProductsService } from './products.service';
+import { PrismaService } from '../common/prisma/prisma.service';
+import { StorageService } from '../common/storage/storage.service';
+@Controller('products')
+export class ProductsController {
+  constructor(
+    private readonly service: ProductsService,
+    private readonly prisma: PrismaService,
+  ) {}
+  @Get() list(@Query() q: ProductQueryDto) {
+    return this.service.list(q);
+  }
+  @Get(':slug') bySlug(@Param('slug') slug: string) {
+    return this.service.bySlug(slug);
+  }
 }
-@UseGuards(AuthGuard) @Controller("admin/products") export class AdminProductsController { constructor(private readonly service: ProductsService, private readonly prisma: PrismaService, private readonly storage: StorageService) {}
- @Get() list(@Query() q: ProductQueryDto) { return this.service.list(q, false); } @Post() create(@Body() dto: CreateProductDto) { return this.service.create(dto); } @Get(":id") one(@Param("id") id: string) { return this.service.adminById(id); } @Patch(":id") update(@Param("id") id: string, @Body() dto: UpdateProductDto) { return this.service.update(id, dto); } @Delete(":id") remove(@Param("id") id: string) { return this.service.remove(id); }
- @Post(":id/images") @UseInterceptors(FileInterceptor("file", { limits: { fileSize: Number(process.env.MAX_IMAGE_SIZE_BYTES ?? 5242880) } })) async image(@Param("id") productId: string, @UploadedFile() file: { mimetype: string; buffer: Buffer }) { if (!file) throw new BadRequestException("FILE_REQUIRED"); const valid = (file.mimetype === "image/png" && file.buffer.subarray(0, 8).equals(Buffer.from([137,80,78,71,13,10,26,10]))) || (file.mimetype === "image/jpeg" && file.buffer[0] === 255 && file.buffer[1] === 216 && file.buffer[2] === 255) || (file.mimetype === "image/webp" && file.buffer.toString("ascii", 0, 4) === "RIFF" && file.buffer.toString("ascii", 8, 12) === "WEBP"); if (!valid) throw new BadRequestException("UNSUPPORTED_IMAGE_TYPE"); await this.service.adminById(productId); const count = await this.prisma.productImage.count({ where: { productId } }); if (count >= 10) throw new BadRequestException("IMAGE_LIMIT_REACHED"); const url = await this.storage.upload(file.buffer, file.mimetype); return this.prisma.productImage.create({ data: { productId, url, position: count } }); }
- @Patch(":id/images/:imageId") async imagePosition(@Param("id") productId: string, @Param("imageId") id: string, @Body() dto: ImagePositionDto) { const image = await this.prisma.productImage.findFirst({ where: { id, productId } }); if (!image) throw new NotFoundException(); return this.prisma.productImage.update({ where: { id }, data: { position: dto.position } }); }
- @Delete(":id/images/:imageId") async deleteImage(@Param("id") productId: string, @Param("imageId") id: string) { const image = await this.prisma.productImage.findFirst({ where: { id, productId } }); if (!image) throw new NotFoundException(); await this.storage.remove(image.url); await this.prisma.productImage.delete({ where: { id } }); return { success: true }; }
+@UseGuards(AuthGuard)
+@Controller('admin/products')
+export class AdminProductsController {
+  constructor(
+    private readonly service: ProductsService,
+    private readonly prisma: PrismaService,
+    private readonly storage: StorageService,
+  ) {}
+  @Get() list(@Query() q: ProductQueryDto) {
+    return this.service.list(q, false);
+  }
+  @Post() create(@Body() dto: CreateProductDto) {
+    return this.service.create(dto);
+  }
+  @Get(':id') one(@Param('id') id: string) {
+    return this.service.adminById(id);
+  }
+  @Patch(':id') update(@Param('id') id: string, @Body() dto: UpdateProductDto) {
+    return this.service.update(id, dto);
+  }
+  @Delete(':id') remove(@Param('id') id: string) {
+    return this.service.remove(id);
+  }
+  @Post(':id/images')
+  @UseInterceptors(
+    FileInterceptor('file', {
+      limits: { fileSize: Number(process.env.MAX_IMAGE_SIZE_BYTES ?? 5242880) },
+    }),
+  )
+  async image(
+    @Param('id') productId: string,
+    @UploadedFile() file: { mimetype: string; buffer: Buffer },
+  ) {
+    if (!file) throw new BadRequestException('FILE_REQUIRED');
+    const valid =
+      (file.mimetype === 'image/png' &&
+        file.buffer.subarray(0, 8).equals(Buffer.from([137, 80, 78, 71, 13, 10, 26, 10]))) ||
+      (file.mimetype === 'image/jpeg' &&
+        file.buffer[0] === 255 &&
+        file.buffer[1] === 216 &&
+        file.buffer[2] === 255) ||
+      (file.mimetype === 'image/webp' &&
+        file.buffer.toString('ascii', 0, 4) === 'RIFF' &&
+        file.buffer.toString('ascii', 8, 12) === 'WEBP');
+    if (!valid) throw new BadRequestException('UNSUPPORTED_IMAGE_TYPE');
+    await this.service.adminById(productId);
+    const count = await this.prisma.productImage.count({ where: { productId } });
+    if (count >= 10) throw new BadRequestException('IMAGE_LIMIT_REACHED');
+    const url = await this.storage.upload(file.buffer, file.mimetype);
+    return this.prisma.productImage.create({ data: { productId, url, position: count } });
+  }
+  @Patch(':id/images/:imageId') async imagePosition(
+    @Param('id') productId: string,
+    @Param('imageId') id: string,
+    @Body() dto: ImagePositionDto,
+  ) {
+    const image = await this.prisma.productImage.findFirst({ where: { id, productId } });
+    if (!image) throw new NotFoundException();
+    return this.prisma.productImage.update({ where: { id }, data: { position: dto.position } });
+  }
+  @Delete(':id/images/:imageId') async deleteImage(
+    @Param('id') productId: string,
+    @Param('imageId') id: string,
+  ) {
+    const image = await this.prisma.productImage.findFirst({ where: { id, productId } });
+    if (!image) throw new NotFoundException();
+    await this.storage.remove(image.url);
+    await this.prisma.productImage.delete({ where: { id } });
+    return { success: true };
+  }
 }

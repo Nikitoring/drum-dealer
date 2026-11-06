@@ -1,9 +1,9 @@
-import { Body, Controller, Get, Post, UseGuards } from "@nestjs/common";
-import { AuthGuard } from "../common/auth/auth.guard";
-import { CategoriesService } from "./categories.service";
-import { CreateCategoryDto } from "./dto/category.dto";
+import { Body, Controller, Get, Post, UseGuards } from '@nestjs/common';
+import { AuthGuard } from '../common/auth/auth.guard';
+import { CategoriesService } from './categories.service';
+import { CreateCategoryDto } from './dto/category.dto';
 
-@Controller("categories")
+@Controller('categories')
 export class CategoriesController {
   constructor(private readonly service: CategoriesService) {}
 
@@ -14,7 +14,7 @@ export class CategoriesController {
 }
 
 @UseGuards(AuthGuard)
-@Controller("admin/categories")
+@Controller('admin/categories')
 export class AdminCategoriesController {
   constructor(private readonly service: CategoriesService) {}
 

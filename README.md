@@ -73,6 +73,8 @@ npm run dev:backend   # только backend
 npm run db:up         # запустить PostgreSQL
 npm run db:down       # остановить PostgreSQL
 npm run db:migrate    # применить Prisma migrations
+npm test --workspace=@drum-dealer/backend  # API-тесты backend
+npm run test:watch --workspace=@drum-dealer/backend  # API-тесты в watch-режиме
 ```
 
 Проверки frontend:
@@ -80,6 +82,8 @@ npm run db:migrate    # применить Prisma migrations
 ```bash
 npm run check --workspace=@drum-dealer/frontend
 ```
+
+API-тесты backend используют Jest, ts-jest и Supertest. Они поднимают Nest-приложение в памяти с моками Prisma и S3, поэтому для запуска не нужны PostgreSQL, Docker или реальные ключи Object Storage. Покрыты публичные и административные endpoint-ы, JWT-защита, валидация, POST/PATCH-сценарии, ошибки переходов статусов, бронирование и загрузка изображений.
 
 ## Документация
 

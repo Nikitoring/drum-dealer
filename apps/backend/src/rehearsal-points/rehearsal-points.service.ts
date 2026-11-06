@@ -1,15 +1,130 @@
-import { ConflictException, Injectable, NotFoundException } from "@nestjs/common"; import { PrismaService } from "../common/prisma/prisma.service"; import { CreateRehearsalPointDto, CreateSlotDto, SlotQueryDto, UpdateRehearsalPointDto } from "./dto/rehearsal-point.dto";
-@Injectable() export class RehearsalPointsService { constructor(private readonly prisma: PrismaService) {} private point(p: any) { return p && { ...p, pricePerHour: p.pricePerHour?.toString() }; }
- private readonly include = { images: { orderBy: [{ type: "asc" as const }, { position: "asc" as const }] } };
- async list() { return (await this.prisma.rehearsalPoint.findMany({ orderBy: { name: "asc" }, include: this.include })).map(p => this.point(p)); }
- async bySlug(slug: string) { const p = await this.prisma.rehearsalPoint.findUnique({ where: { slug }, include: this.include }); if (!p) throw new NotFoundException(); return this.point(p); }
- async create(dto: CreateRehearsalPointDto) { try { return this.point(await this.prisma.rehearsalPoint.create({ data: dto as any })); } catch (e) { if ((e as any).code === "P2002") throw new ConflictException("SLUG_EXISTS"); throw e; } }
- async update(id: string, dto: UpdateRehearsalPointDto) { await this.get(id); return this.point(await this.prisma.rehearsalPoint.update({ where: { id }, data: dto as any, include: this.include })); }
- async get(id: string) { const p = await this.prisma.rehearsalPoint.findUnique({ where: { id } }); if (!p) throw new NotFoundException(); return p; }
- async remove(id: string) { await this.get(id); try { await this.prisma.rehearsalPoint.delete({ where: { id } }); return { success: true }; } catch { throw new ConflictException("POINT_HAS_SLOTS"); } }
- async adminById(id: string) { const point = await this.prisma.rehearsalPoint.findUnique({ where: { id }, include: this.include }); if (!point) throw new NotFoundException(); return this.point(point); }
- async slots(slug: string, q: SlotQueryDto, admin = false) { const point = await this.bySlug(slug); const where: any = { rehearsalPointId: point.id, ...(q.from || q.to ? { startAt: { ...(q.from && { gte: new Date(q.from) }), ...(q.to && { lt: new Date(q.to) }) } } : {}) }; return this.prisma.timeSlot.findMany({ where, orderBy: { startAt: "asc" }, ...(admin && { include: { bookings: true } }) }); }
- async slotsByPoint(q: SlotQueryDto) { const where: any = { ...(q.rehearsalPointId && { rehearsalPointId: q.rehearsalPointId }), ...(q.from || q.to ? { startAt: { ...(q.from && { gte: new Date(q.from) }), ...(q.to && { lt: new Date(q.to) }) } } : {}) }; return this.prisma.timeSlot.findMany({ where, orderBy: { startAt: "asc" }, include: { bookings: true } }); }
- async createSlot(id: string, dto: CreateSlotDto) { await this.get(id); try { return await this.prisma.timeSlot.create({ data: { rehearsalPointId: id, startAt: new Date(dto.startAt), endAt: new Date(new Date(dto.startAt).getTime() + 3600000) } }); } catch (e) { if ((e as any).code === "P2002") throw new ConflictException("SLOT_EXISTS"); throw e; } }
- async setStatus(id: string, status: "AVAILABLE" | "BLOCKED") { const slot = await this.prisma.timeSlot.findUnique({ where: { id } }); if (!slot) throw new NotFoundException(); if (!["AVAILABLE", "BLOCKED"].includes(slot.status) ) throw new ConflictException("INVALID_STATUS_TRANSITION"); return this.prisma.timeSlot.update({ where: { id }, data: { status } }); }
+import { ConflictException, Injectable, NotFoundException } from '@nestjs/common';
+import { PrismaService } from '../common/prisma/prisma.service';
+import {
+  CreateRehearsalPointDto,
+  CreateSlotDto,
+  SlotQueryDto,
+  UpdateRehearsalPointDto,
+} from './dto/rehearsal-point.dto';
+@Injectable()
+export class RehearsalPointsService {
+  constructor(private readonly prisma: PrismaService) {}
+  private point(p: any) {
+    return p && { ...p, pricePerHour: p.pricePerHour?.toString() };
+  }
+  private readonly include = {
+    images: { orderBy: [{ type: 'asc' as const }, { position: 'asc' as const }] },
+  };
+  async list() {
+    return (
+      await this.prisma.rehearsalPoint.findMany({ orderBy: { name: 'asc' }, include: this.include })
+    ).map((p) => this.point(p));
+  }
+  async bySlug(slug: string) {
+    const p = await this.prisma.rehearsalPoint.findUnique({
+      where: { slug },
+      include: this.include,
+    });
+    if (!p) throw new NotFoundException();
+    return this.point(p);
+  }
+  async create(dto: CreateRehearsalPointDto) {
+    try {
+      return this.point(await this.prisma.rehearsalPoint.create({ data: dto as any }));
+    } catch (e) {
+      if ((e as any).code === 'P2002') throw new ConflictException('SLUG_EXISTS');
+      throw e;
+    }
+  }
+  async update(id: string, dto: UpdateRehearsalPointDto) {
+    await this.get(id);
+    return this.point(
+      await this.prisma.rehearsalPoint.update({
+        where: { id },
+        data: dto as any,
+        include: this.include,
+      }),
+    );
+  }
+  async get(id: string) {
+    const p = await this.prisma.rehearsalPoint.findUnique({ where: { id } });
+    if (!p) throw new NotFoundException();
+    return p;
+  }
+  async remove(id: string) {
+    await this.get(id);
+    try {
+      await this.prisma.rehearsalPoint.delete({ where: { id } });
+      return { success: true };
+    } catch {
+      throw new ConflictException('POINT_HAS_SLOTS');
+    }
+  }
+  async adminById(id: string) {
+    const point = await this.prisma.rehearsalPoint.findUnique({
+      where: { id },
+      include: this.include,
+    });
+    if (!point) throw new NotFoundException();
+    return this.point(point);
+  }
+  async slots(slug: string, q: SlotQueryDto, admin = false) {
+    const point = await this.bySlug(slug);
+    const where: any = {
+      rehearsalPointId: point.id,
+      ...(q.from || q.to
+        ? {
+            startAt: {
+              ...(q.from && { gte: new Date(q.from) }),
+              ...(q.to && { lt: new Date(q.to) }),
+            },
+          }
+        : {}),
+    };
+    return this.prisma.timeSlot.findMany({
+      where,
+      orderBy: { startAt: 'asc' },
+      ...(admin && { include: { bookings: true } }),
+    });
+  }
+  slotsByPoint(q: SlotQueryDto) {
+    const where: any = {
+      ...(q.rehearsalPointId && { rehearsalPointId: q.rehearsalPointId }),
+      ...(q.from || q.to
+        ? {
+            startAt: {
+              ...(q.from && { gte: new Date(q.from) }),
+              ...(q.to && { lt: new Date(q.to) }),
+            },
+          }
+        : {}),
+    };
+    return this.prisma.timeSlot.findMany({
+      where,
+      orderBy: { startAt: 'asc' },
+      include: { bookings: true },
+    });
+  }
+  async createSlot(id: string, dto: CreateSlotDto) {
+    await this.get(id);
+    try {
+      return await this.prisma.timeSlot.create({
+        data: {
+          rehearsalPointId: id,
+          startAt: new Date(dto.startAt),
+          endAt: new Date(new Date(dto.startAt).getTime() + 3600000),
+        },
+      });
+    } catch (e) {
+      if ((e as any).code === 'P2002') throw new ConflictException('SLOT_EXISTS');
+      throw e;
+    }
+  }
+  async setStatus(id: string, status: 'AVAILABLE' | 'BLOCKED') {
+    const slot = await this.prisma.timeSlot.findUnique({ where: { id } });
+    if (!slot) throw new NotFoundException();
+    if (!['AVAILABLE', 'BLOCKED'].includes(slot.status))
+      throw new ConflictException('INVALID_STATUS_TRANSITION');
+    return this.prisma.timeSlot.update({ where: { id }, data: { status } });
+  }
 }
