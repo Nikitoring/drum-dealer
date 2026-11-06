@@ -32,6 +32,11 @@ enum BookingStatus {
   CANCELLED
 }
 
+enum RehearsalPointImageType {
+  POINT
+  EQUIPMENT
+}
+
 model Admin {
   id           String   @id @default(uuid()) @db.Uuid
   email        String   @unique
@@ -45,18 +50,28 @@ model Product {
   name           String
   slug           String            @unique
   brand          String?
-  category       String
+  categoryId     String            @db.Uuid
   price          Decimal           @db.Decimal(12, 2)
   condition      ProductCondition
   status         ProductStatus     @default(AVAILABLE)
   description    String?           @db.Text
   specifications Json?             @db.JsonB
+  category       Category          @relation(fields: [categoryId], references: [id], onDelete: Restrict)
   images         ProductImage[]
   createdAt      DateTime          @default(now()) @db.Timestamptz(3)
   updatedAt      DateTime          @updatedAt @db.Timestamptz(3)
 
-  @@index([category, brand, condition])
+  @@index([categoryId, brand, condition])
   @@index([status, createdAt])
+}
+
+model Category {
+  id        String    @id @default(uuid()) @db.Uuid
+  name      String    @unique
+  slug      String    @unique
+  products  Product[]
+  createdAt DateTime  @default(now()) @db.Timestamptz(3)
+  updatedAt DateTime  @updatedAt @db.Timestamptz(3)
 }
 
 model ProductImage {
@@ -77,11 +92,24 @@ model RehearsalPoint {
   address      String
   description  String?    @db.Text
   equipment    String?    @db.Text
+  images       RehearsalPointImage[]
   contactPhone String?
   pricePerHour Decimal?   @db.Decimal(12, 2)
   slots        TimeSlot[]
   createdAt    DateTime   @default(now()) @db.Timestamptz(3)
   updatedAt    DateTime   @updatedAt @db.Timestamptz(3)
+}
+
+model RehearsalPointImage {
+  id               String                  @id @default(uuid()) @db.Uuid
+  rehearsalPointId String                  @db.Uuid
+  url              String
+  type             RehearsalPointImageType @default(POINT)
+  position         Int                     @default(0)
+  rehearsalPoint   RehearsalPoint           @relation(fields: [rehearsalPointId], references: [id], onDelete: Cascade)
+  createdAt        DateTime                @default(now()) @db.Timestamptz(3)
+
+  @@index([rehearsalPointId, type, position])
 }
 
 model TimeSlot {

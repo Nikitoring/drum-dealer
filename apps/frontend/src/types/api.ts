@@ -7,12 +7,19 @@ export type Product = {
   name: string;
   brand: string | null;
   category: string;
+  categoryId: string;
   condition: ProductCondition;
   status: ProductStatus;
   price: string;
   description?: string | null;
   specifications?: Record<string, string> | null;
   images: { id?: string; url: string; position?: number }[];
+};
+
+export type Category = {
+  id: string;
+  name: string;
+  slug: string;
 };
 
 export type Paginated<T> = {
@@ -37,7 +44,7 @@ export type CreateProductInput = {
   name: string;
   slug: string;
   brand?: string;
-  category: string;
+  categoryId: string;
   price: string;
   condition: ProductCondition;
   status: ProductStatus;
@@ -58,7 +65,15 @@ export type RehearsalPoint = {
   equipment?: string | null;
   contactPhone?: string | null;
   pricePerHour?: string | null;
+  images: { id: string; url: string; type: 'POINT' | 'EQUIPMENT'; position: number }[];
 };
+
+export type RehearsalPointInput = Partial<
+  Pick<
+    RehearsalPoint,
+    'name' | 'address' | 'description' | 'equipment' | 'contactPhone' | 'pricePerHour'
+  >
+>;
 
 export type TimeSlot = {
   id: string;

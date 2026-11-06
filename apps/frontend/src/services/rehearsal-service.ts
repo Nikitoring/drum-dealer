@@ -8,12 +8,36 @@ import type {
   RehearsalPoint,
   TimeSlot,
   AdminSchedule,
+  RehearsalPointInput,
 } from '@/types/api';
 
 export const rehearsalService = {
   points: (signal?: AbortSignal) => apiRequest<RehearsalPoint[]>('/rehearsal-points', { signal }),
   point: (slug: string, signal?: AbortSignal) =>
     apiRequest<RehearsalPoint>(`/rehearsal-points/${encodeURIComponent(slug)}`, { signal }),
+  adminPoints: (signal?: AbortSignal) =>
+    apiRequest<RehearsalPoint[]>('/admin/rehearsal-points', { signal }),
+  adminPoint: (id: string, signal?: AbortSignal) =>
+    apiRequest<RehearsalPoint>(`/admin/rehearsal-points/${encodeURIComponent(id)}`, { signal }),
+  updateAdminPoint: (id: string, input: RehearsalPointInput) =>
+    apiRequest<RehearsalPoint>(`/admin/rehearsal-points/${encodeURIComponent(id)}`, {
+      method: 'PATCH',
+      body: JSON.stringify(input),
+    }),
+  uploadAdminPointImage: (id: string, type: 'POINT' | 'EQUIPMENT', file: File) => {
+    const body = new FormData();
+    body.append('type', type);
+    body.append('file', file);
+    return apiRequest<RehearsalPoint['images'][number]>(
+      `/admin/rehearsal-points/${encodeURIComponent(id)}/images`,
+      { method: 'POST', body },
+    );
+  },
+  deleteAdminPointImage: (id: string, imageId: string) =>
+    apiRequest<{ success: boolean }>(
+      `/admin/rehearsal-points/${encodeURIComponent(id)}/images/${encodeURIComponent(imageId)}`,
+      { method: 'DELETE' },
+    ),
   slots: (slug: string, from: string, to: string, signal?: AbortSignal) =>
     apiRequest<TimeSlot[]>(
       `/rehearsal-points/${encodeURIComponent(slug)}/slots?from=${encodeURIComponent(from)}&to=${encodeURIComponent(to)}`,

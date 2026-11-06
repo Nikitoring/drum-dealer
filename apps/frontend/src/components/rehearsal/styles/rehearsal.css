@@ -71,6 +71,133 @@
 .booking-area {
   padding: 36px clamp(24px, 4vw, 50px) 48px;
 }
+.point-gallery {
+  position: relative;
+  display: grid;
+  gap: 14px;
+  padding: 10px clamp(24px, 4vw, 50px) 42px;
+}
+.point-gallery-heading {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 16px;
+}
+.point-gallery-heading h2 {
+  margin: 0;
+  font-family: var(--heading-font);
+  font-size: 30px;
+}
+.point-gallery-heading span {
+  color: var(--gray);
+  font-weight: 700;
+}
+.point-gallery-slider {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 12px;
+}
+.point-gallery-main {
+  position: relative;
+  width: min(100%, 250px);
+  height: min(250px, 60vw);
+  min-height: 180px;
+  justify-self: center;
+  overflow: hidden;
+  border: 0;
+  border-radius: 10px;
+  background: var(--paper);
+  cursor: zoom-in;
+}
+.point-gallery-main img,
+.point-gallery-thumbnail img,
+.point-gallery-fullscreen-image img {
+  object-fit: contain;
+}
+.point-gallery-arrow {
+  display: grid;
+  width: 42px;
+  height: 42px;
+  place-items: center;
+  border: 1px solid rgba(23, 23, 23, 0.18);
+  border-radius: 50%;
+  background: var(--paper);
+  color: var(--ink);
+  font-size: 32px;
+  line-height: 1;
+  cursor: pointer;
+}
+.point-gallery-thumbnails {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  overflow-x: auto;
+  padding: 2px;
+}
+.point-gallery-thumbnail {
+  position: relative;
+  flex: 0 0 82px;
+  width: 82px;
+  height: 64px;
+  overflow: hidden;
+  border: 2px solid transparent;
+  border-radius: 6px;
+  background: var(--paper);
+  cursor: pointer;
+}
+.point-gallery-thumbnail[aria-pressed='true'] {
+  border-color: var(--red);
+}
+.point-gallery-lightbox {
+  position: fixed;
+  z-index: 30;
+  inset: 0;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 18px;
+  padding: 40px;
+  background: rgba(23, 23, 23, 0.92);
+}
+.point-gallery-fullscreen-image {
+  position: relative;
+  width: 100%;
+  height: min(90vh, 900px);
+}
+.point-gallery-lightbox .point-gallery-arrow {
+  background: var(--paper);
+}
+.point-gallery-close {
+  position: absolute;
+  top: 16px;
+  right: 20px;
+  z-index: 1;
+  border: 0;
+  background: transparent;
+  color: white;
+  font-size: 40px;
+  line-height: 1;
+  cursor: pointer;
+}
+@media (max-width: 640px) {
+  .point-gallery-slider {
+    gap: 6px;
+  }
+  .point-gallery-arrow {
+    width: 34px;
+    height: 34px;
+    font-size: 26px;
+  }
+  .point-gallery-main {
+    height: 56vw;
+    min-height: 180px;
+  }
+  .point-gallery-lightbox {
+    gap: 8px;
+    padding: 30px 8px;
+  }
+}
 .booking-area h2 {
   margin: 0 0 22px;
   font-family: var(--heading-font);

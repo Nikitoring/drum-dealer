@@ -2,7 +2,9 @@
 
 import Image from 'next/image';
 import Link from 'next/link';
+import { Search } from 'lucide-react';
 import { useProducts } from '@/hooks/use-products';
+import { useCategories } from '@/hooks/use-categories';
 import { DrmButton, DrmCheckbox, DrmInput, DrmSelect } from '@/components/ui';
 import type { ProductCondition } from '@/types/api';
 import { useCatalogFiltersStore } from '@/stores/product-store';
@@ -17,6 +19,7 @@ export function ProductCatalog() {
     search,
     sort,
   });
+  const categoriesQuery = useCategories();
   const products = productsQuery.data?.pages.flatMap((result) => result.data) ?? [];
 
   return (
@@ -24,20 +27,13 @@ export function ProductCatalog() {
       <div className="catalog-layout">
         <aside aria-label="Фильтры каталога" className="catalog-filters">
           <h2>Категория</h2>
-          {[
-            'Акустические барабаны',
-            'Электронные',
-            'Малые барабаны',
-            'Тарелки',
-            'Стойки',
-            'Аксессуары',
-          ].map((item) => (
-            <label key={item}>
+          {(categoriesQuery.data ?? []).map((item) => (
+            <label key={item.id}>
               <DrmCheckbox
-                checked={category === item}
-                onChange={() => setFilter('category', category === item ? 'all' : item)}
+                checked={category === item.name}
+                onChange={() => setFilter('category', category === item.name ? 'all' : item.name)}
               />{' '}
-              {item}
+              {item.name}
             </label>
           ))}
           <h2>Бренд</h2>
@@ -76,8 +72,11 @@ export function ProductCatalog() {
               value={category}
             >
               <option value="all">Категория</option>
-              <option value="Акустические барабаны">Акустические</option>
-              <option value="Малые барабаны">Малые барабаны</option>
+              {(categoriesQuery.data ?? []).map((item) => (
+                <option key={item.id} value={item.name}>
+                  {item.name}
+                </option>
+              ))}
             </DrmSelect>
             <label className="sr-only" htmlFor="sort-filter">
               Сортировка
@@ -94,7 +93,7 @@ export function ProductCatalog() {
               <option value="oldest">Сначала старые</option>
             </DrmSelect>
             <label className="search-control">
-              <span aria-hidden="true">⌕</span>
+              <Search aria-hidden="true" size={18} strokeWidth={2} />
               <span className="sr-only">Поиск товаров</span>
               <DrmInput
                 onChange={(event) => setFilter('search', event.target.value)}

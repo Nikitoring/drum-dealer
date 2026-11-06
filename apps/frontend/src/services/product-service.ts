@@ -1,6 +1,7 @@
 import { apiRequest } from '@/lib/api';
 import type {
   AdminProductFilters,
+  Category,
   CreateProductInput,
   Paginated,
   Product,
@@ -28,6 +29,12 @@ const toAdminSearchParams = (filters: AdminProductFilters, page: number) => {
 };
 
 export const productService = {
+  categories: (signal?: AbortSignal) => apiRequest<Category[]>('/categories', { signal }),
+  createCategory: (name: string) =>
+    apiRequest<Category>('/admin/categories', {
+      method: 'POST',
+      body: JSON.stringify({ name }),
+    }),
   list: (filters: ProductFilters, page: number, signal?: AbortSignal) =>
     apiRequest<Paginated<Product>>(`/products?${toSearchParams(filters, page)}`, { signal }),
   bySlug: (slug: string, signal?: AbortSignal) =>

@@ -90,12 +90,20 @@ async function main() {
   ];
 
   for (const item of products) {
+    const category = await prisma.category.upsert({
+      where: { name: item.category },
+      update: {},
+      create: {
+        name: item.category,
+        slug: item.category.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, ""),
+      },
+    });
     const product = await prisma.product.upsert({
       where: { slug: item.slug },
       update: {
         name: item.name,
         brand: item.brand,
-        category: item.category,
+        categoryId: category.id,
         price: item.price,
         condition: item.condition,
         status: item.status,
@@ -106,7 +114,7 @@ async function main() {
         name: item.name,
         slug: item.slug,
         brand: item.brand,
-        category: item.category,
+        categoryId: category.id,
         price: item.price,
         condition: item.condition,
         status: item.status,

@@ -1,6 +1,7 @@
 'use client';
 
 import { useMemo, useState } from 'react';
+import Link from 'next/link';
 import { useAdminSchedule, useAdminScheduleMutations } from '@/hooks/use-admin-schedule';
 import { DrmButton, DrmInput, DrmSelect } from '@/components/ui';
 import type { TimeSlot } from '@/types/api';
@@ -91,6 +92,12 @@ export function AdminSchedule() {
                   <h2>{point.name}</h2>
                   <span>{point.address}</span>
                 </div>
+                <Link
+                  className="button button-outline-red"
+                  href={`/admin/rehearsal-points/${point.id}/edit`}
+                >
+                  Редактировать
+                </Link>
                 <form
                   onSubmit={(event) => {
                     event.preventDefault();

@@ -8,6 +8,7 @@ import { RehearsalPointsModule } from "./rehearsal-points/rehearsal-points.modul
 import { BookingsModule } from "./bookings/bookings.module";
 import { AdminModule } from "./admin/admin.module";
 import { StorageModule } from "./common/storage/storage.module";
+import { CategoriesModule } from "./categories/categories.module";
 
 @Module({
   imports: [
@@ -22,6 +23,7 @@ import { StorageModule } from "./common/storage/storage.module";
     RehearsalPointsModule,
     BookingsModule,
     AdminModule,
+    CategoriesModule,
   ],
   controllers: [HealthController],
   providers: [],
