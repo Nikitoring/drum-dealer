@@ -3,8 +3,7 @@ import Link from 'next/link';
 import { SiteFooter } from '@/components/site-footer';
 import { SiteHeader } from '@/components/site-header';
 
-const illustration = (name: string, svg = false) =>
-  `/design/illustrations/${name}.${svg ? 'svg' : 'png'}`;
+const illustration = (name: string) => `/design/illustrations/${name}.webp`;
 
 function FeatureIcon({ kind }: { kind: 'box' | 'calendar' | 'pin' }) {
   if (kind === 'box')
@@ -55,8 +54,9 @@ export default function HomePage() {
               alt="Барабанщик с малым барабаном"
               fill
               priority
-              sizes="(max-width: 700px) 100vw, 54vw"
-              src={illustration('01-drummer', true)}
+              quality={80}
+              sizes="(max-width: 640px) 100vw, (max-width: 1392px) 53vw, 738px"
+              src={illustration('01-drummer')}
             />
           </div>
         </section>
@@ -78,8 +78,9 @@ export default function HomePage() {
             <Image
               alt="Репетиционная комната с музыкальным оборудованием"
               fill
-              sizes="(max-width: 700px) 100vw, 65vw"
-              src="/design/kovry-room.jpg"
+              quality={80}
+              sizes="(max-width: 640px) 100vw, (max-width: 1392px) 65vw, 905px"
+              src="/design/kovry-room.webp"
             />
           </div>
         </section>
@@ -126,8 +127,10 @@ export default function HomePage() {
             <Image
               alt="Малый барабан"
               height={371}
-              src={illustration('04-snare-drum')}
               width={489}
+              quality={80}
+              sizes="(max-width: 640px) 55vw, (max-width: 1392px) 27vw, 340px"
+              src={illustration('04-snare-drum')}
             />
           </article>
           <article className="home-direction-card">
@@ -138,7 +141,14 @@ export default function HomePage() {
                 Выбрать точку <span aria-hidden="true">→</span>
               </Link>
             </div>
-            <Image alt="Мегафон" height={400} src={illustration('06-megaphone')} width={506} />
+            <Image
+              alt="Мегафон"
+              height={400}
+              width={506}
+              quality={80}
+              sizes="(max-width: 640px) 55vw, (max-width: 1392px) 27vw, 340px"
+              src={illustration('06-megaphone')}
+            />
           </article>
         </section>
 
@@ -147,12 +157,21 @@ export default function HomePage() {
             <Image
               alt="Плакатный портрет женщины"
               height={416}
-              src={illustration('02-man-and-woman')}
               width={479}
+              quality={80}
+              sizes="(max-width: 640px) 50vw, 25vw"
+              src={illustration('02-man-and-woman')}
             />
           </div>
           <div className="poster-figure poster-building">
-            <Image alt="Здание" height={426} src={illustration('03-building')} width={515} />
+            <Image
+              alt="Здание"
+              height={426}
+              width={515}
+              quality={80}
+              sizes="(max-width: 640px) 50vw, 35vw"
+              src={illustration('03-building')}
+            />
           </div>
           <p>
             Музыка

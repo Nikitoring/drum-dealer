@@ -113,9 +113,9 @@ export function ProductCatalog() {
                     <Image
                       alt={product.name}
                       className="product-card-image"
+                      src={product.images[0]?.url || '/design/03-drum-kit.webp'}
                       height={314}
-                      src={product.images[0]?.url || '/design/03-drum-kit.png'}
-                      unoptimized
+                      sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 310px"
                       width={310}
                     />
                     <div className="product-card-body">

@@ -26,7 +26,7 @@ export function ProductDetail({ slug }: { slug: string }) {
 
   const photos = product.images.length
     ? product.images.map((image) => image.url)
-    : ['/design/03-drum-kit.png'];
+    : ['/design/03-drum-kit.webp'];
   const updatePhoto = (step: number) =>
     setPhotoIndex((current) => (current + step + photos.length) % photos.length);
   const relatedProducts = (related?.data ?? [])
@@ -50,9 +50,9 @@ export function ProductDetail({ slug }: { slug: string }) {
             <Image
               alt={`${product.name}, фотография ${photoIndex + 1}`}
               height={314}
-              priority
               src={photos[photoIndex]}
-              unoptimized
+              priority
+              sizes="(max-width: 700px) 100vw, 310px"
               width={310}
             />
             {photos.length > 1 && (
@@ -86,7 +86,7 @@ export function ProductDetail({ slug }: { slug: string }) {
                   onClick={() => setPhotoIndex(index)}
                   type="button"
                 >
-                  <Image alt="" height={314} src={photo} unoptimized width={310} />
+                  <Image alt="" height={80} sizes="80px" src={photo} width={80} />
                 </DrmButton>
               ))}
             </div>
@@ -133,8 +133,7 @@ export function ProductDetail({ slug }: { slug: string }) {
                     <Image
                       alt={item.name}
                       height={120}
-                      src={item.images[0]?.url || '/design/03-drum-kit.png'}
-                      unoptimized
+                      src={item.images[0]?.url || '/design/03-drum-kit.webp'}
                       width={150}
                     />
                     <strong>{item.name}</strong>

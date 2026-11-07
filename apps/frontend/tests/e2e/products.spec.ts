@@ -1,10 +1,24 @@
 import { expect, test } from '@playwright/test';
 
-const product = { slug: 'pearl-kit', name: 'Pearl Export', brand: 'Pearl', category: 'Барабаны', categoryId: 'c1', condition: 'USED', status: 'AVAILABLE', price: '120000', description: 'Комплект из Японии', specifications: { Размер: '22' }, images: [{ id: 'i1', url: '/design/03-drum-kit.png' }] };
+const product = {
+  slug: 'pearl-kit',
+  name: 'Pearl Export',
+  brand: 'Pearl',
+  category: 'Барабаны',
+  categoryId: 'c1',
+  condition: 'USED',
+  status: 'AVAILABLE',
+  price: '120000',
+  description: 'Комплект из Японии',
+  specifications: { Размер: '22' },
+  images: [{ id: 'i1', url: '/design/03-drum-kit.webp' }],
+};
 
 test.beforeEach(async ({ page }) => {
   await page.route('**/api/products/pearl-kit', (route) => route.fulfill({ json: product }));
-  await page.route('**/api/products?*', (route) => route.fulfill({ json: { data: [], meta: { page: 1, pageSize: 4, total: 0, totalPages: 0 } } }));
+  await page.route('**/api/products?*', (route) =>
+    route.fulfill({ json: { data: [], meta: { page: 1, pageSize: 4, total: 0, totalPages: 0 } } }),
+  );
 });
 
 test('просматривает карточку товара и переходит к заявке на покупку', async ({ page }) => {
