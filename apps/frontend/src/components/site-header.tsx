@@ -1,3 +1,4 @@
+import Image from 'next/image';
 import Link from 'next/link';
 
 const links = [
@@ -12,7 +13,15 @@ export function SiteHeader() {
     <header className="site-frame site-header">
       <Link aria-label="Drum Dealer и Ковры — главная" className="brand-lockup" href="/">
         <span className="brand-drum">
-          <span className="brand-mark">×</span>
+          <Image
+            src="/logo.png"
+            alt="logo"
+            priority
+            height={80}
+            width={80}
+            sizes="80px"
+            quality={80}
+          />
           <span>
             DRUM
             <br />

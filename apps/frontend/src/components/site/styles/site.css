@@ -114,6 +114,14 @@
   background: var(--ink);
   color: var(--paper);
 }
+
+.site-footer a {
+  color: var(--paper);
+}
+
+.site-footer a:hover {
+  color: var(--red);
+}
 .footer-brand {
   gap: 9px;
   font-size: 21px;
