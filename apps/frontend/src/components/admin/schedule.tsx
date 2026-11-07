@@ -42,14 +42,6 @@ export function AdminSchedule() {
   const points =
     schedule.data?.data.filter(({ point }) => pointId === 'all' || point.id === pointId) ?? [];
 
-  const createPoint = async () => {
-    const name = prompt('Введите название точки');
-    if (!name) return;
-    const address = prompt('Введите адрес точки');
-    if (!address) return;
-    await mutations.createPoint.mutateAsync({ name, address });
-  };
-
   return (
     <>
       <div className="schedule-heading">
