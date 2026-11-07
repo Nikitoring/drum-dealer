@@ -42,6 +42,14 @@ export function AdminSchedule() {
   const points =
     schedule.data?.data.filter(({ point }) => pointId === 'all' || point.id === pointId) ?? [];
 
+  const createPoint = async () => {
+    const name = prompt('Введите название точки');
+    if (!name) return;
+    const address = prompt('Введите адрес точки');
+    if (!address) return;
+    await mutations.createPoint.mutateAsync({ name, address });
+  };
+
   return (
     <>
       <div className="schedule-heading">
@@ -49,6 +57,14 @@ export function AdminSchedule() {
           <h1>Расписание</h1>
           <p>Управление доступностью репетиционных слотов</p>
         </div>
+        <DrmButton
+          aria-pressed="mixed"
+          href="/admin/rehearsal-points/create"
+          type="button"
+          className="button-outline-red"
+        >
+          Добавить точку
+        </DrmButton>
       </div>
       <div className="schedule-toolbar">
         <div className="schedule-days" aria-label="Выбор даты">
@@ -67,17 +83,19 @@ export function AdminSchedule() {
             );
           })}
         </div>
-        <label className="schedule-filter">
-          Точка
-          <DrmSelect value={pointId} onChange={(event) => setPointId(event.target.value)}>
-            <option value="all">Все точки</option>
-            {schedule.data?.data.map(({ point }) => (
-              <option key={point.id} value={point.id}>
-                {point.name}
-              </option>
-            ))}
-          </DrmSelect>
-        </label>
+        <div className="schedule-filters">
+          <label className="schedule-filter">
+            Точка
+            <DrmSelect value={pointId} onChange={(event) => setPointId(event.target.value)}>
+              <option value="all">Все точки</option>
+              {schedule.data?.data.map(({ point }) => (
+                <option key={point.id} value={point.id}>
+                  {point.name}
+                </option>
+              ))}
+            </DrmSelect>
+          </label>
+        </div>
       </div>
       {schedule.isPending ? (
         <p role="status">Загружаем расписание…</p>

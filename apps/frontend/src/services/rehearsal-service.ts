@@ -19,6 +19,11 @@ export const rehearsalService = {
     apiRequest<RehearsalPoint[]>('/admin/rehearsal-points', { signal }),
   adminPoint: (id: string, signal?: AbortSignal) =>
     apiRequest<RehearsalPoint>(`/admin/rehearsal-points/${encodeURIComponent(id)}`, { signal }),
+  createAdminPoint: (input: RehearsalPointInput & { slug: string }) =>
+    apiRequest<RehearsalPoint>('/admin/rehearsal-points', {
+      method: 'POST',
+      body: JSON.stringify(input),
+    }),
   updateAdminPoint: (id: string, input: RehearsalPointInput) =>
     apiRequest<RehearsalPoint>(`/admin/rehearsal-points/${encodeURIComponent(id)}`, {
       method: 'PATCH',

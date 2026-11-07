@@ -33,6 +33,17 @@ export function useAdminPoint(id: string) {
   });
 }
 
+export function useCreateAdminPoint() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: rehearsalService.createAdminPoint,
+    onSuccess: () => {
+      void queryClient.invalidateQueries({ queryKey: ['admin-schedule'] });
+      void queryClient.invalidateQueries({ queryKey: ['rehearsal-points'] });
+    },
+  });
+}
+
 export function useAdminPointMutations(id: string) {
   const queryClient = useQueryClient();
   const refresh = () => {

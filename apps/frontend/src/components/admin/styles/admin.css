@@ -240,6 +240,14 @@
   gap: 8px;
   overflow-x: auto;
 }
+.schedule-filters {
+  display: flex;
+  align-items: flex-end;
+  justify-content: start;
+  gap: 8px;
+  /* margin-bottom: 30px; */
+}
+
 .schedule-days button {
   display: grid;
   min-width: 66px;
