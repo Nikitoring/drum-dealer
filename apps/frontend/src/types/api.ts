@@ -5,7 +5,8 @@ export type Product = {
   id?: string;
   slug: string;
   name: string;
-  brand: string | null;
+  brand: string;
+  brandId: string;
   category: string;
   categoryId: string;
   condition: ProductCondition;
