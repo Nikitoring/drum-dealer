@@ -218,7 +218,7 @@ export function AdminProductForm({ id }: { id?: string }) {
         <label>
           Характеристики (JSON)
           <DrmTextarea
-            onChange={(event) => setField('specifications', event.target.value)}
+            onChange={(event) => setField('specifications', event.target?.value)}
             rows={5}
             value={
               typeof form.specifications === 'string'
