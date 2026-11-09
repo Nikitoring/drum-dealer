@@ -15,17 +15,23 @@ export class ProductsService {
       ...product,
       categoryId: category.id,
       category: category.name,
+      brandId: p.brandId,
+      brand: p.brand.name,
       price: p.price.toString(),
     };
   }
-  private readonly include = { category: true, images: { orderBy: { position: 'asc' as const } } };
+  private readonly include = {
+    category: true,
+    brand: true,
+    images: { orderBy: { position: 'asc' as const } },
+  };
   async list(query: ProductQueryDto, publicOnly = true) {
     const p = pagination(query);
     const where: any = {
       ...(publicOnly ? { status: { not: 'HIDDEN' } } : {}),
       ...(!publicOnly && query.status && { status: query.status }),
       ...(query.category && { category: { name: query.category } }),
-      ...(query.brand && { brand: query.brand }),
+      ...(query.brand && { brand: { name: query.brand } }),
       ...(query.condition && { condition: query.condition }),
       ...(query.q && { name: { contains: query.q, mode: 'insensitive' } }),
     };
@@ -64,6 +70,7 @@ export class ProductsService {
   }
   async create(dto: CreateProductDto) {
     await this.category(dto.categoryId);
+    await this.brand(dto.brandId);
     try {
       return this.map(
         await this.prisma.product.create({
@@ -79,6 +86,7 @@ export class ProductsService {
   async update(id: string, dto: UpdateProductDto) {
     await this.adminById(id);
     if (dto.categoryId) await this.category(dto.categoryId);
+    if (dto.brandId) await this.brand(dto.brandId);
     return this.map(
       await this.prisma.product.update({
         where: { id },
@@ -91,6 +99,12 @@ export class ProductsService {
     const category = await this.prisma.category.findUnique({ where: { id } });
     if (!category) throw new NotFoundException('CATEGORY_NOT_FOUND');
     return category;
+  }
+
+  private async brand(id: string) {
+    const brand = await this.prisma.brand.findUnique({ where: { id } });
+    if (!brand) throw new NotFoundException('BRAND_NOT_FOUND');
+    return brand;
   }
   async remove(id: string) {
     const product = await this.adminById(id);

@@ -8,6 +8,7 @@ import { useCategories } from '@/hooks/use-categories';
 import { DrmButton, DrmCheckbox, DrmInput, DrmSelect } from '@/components/ui';
 import type { ProductCondition } from '@/types/api';
 import { useCatalogFiltersStore } from '@/stores/product-store';
+import { useBrands } from '@/hooks/use-brands';
 const rubles = new Intl.NumberFormat('ru-RU');
 
 export function ProductCatalog() {
@@ -20,6 +21,7 @@ export function ProductCatalog() {
     sort,
   });
   const categoriesQuery = useCategories();
+  const brandsQuery = useBrands();
   const products = productsQuery.data?.pages.flatMap((result) => result.data) ?? [];
 
   return (
@@ -37,13 +39,13 @@ export function ProductCatalog() {
             </label>
           ))}
           <h2>Бренд</h2>
-          {['TAMA', 'Pearl', 'Yamaha', 'Ludwig'].map((item) => (
-            <label key={item}>
+          {(brandsQuery.data ?? []).map((item) => (
+            <label key={item.id}>
               <DrmCheckbox
-                checked={brand === item}
-                onChange={() => setFilter('brand', brand === item ? 'all' : item)}
+                checked={brand === item.name}
+                onChange={() => setFilter('brand', brand === item.name ? 'all' : item.name)}
               />{' '}
-              {item}
+              {item.name}
             </label>
           ))}
           <h2>Состояние</h2>

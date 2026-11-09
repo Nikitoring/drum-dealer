@@ -12,12 +12,13 @@ import {
   useUploadProductImage,
 } from '@/hooks/use-admin-products';
 import { useCategories, useCreateCategory } from '@/hooks/use-categories';
+import { useBrands, useCreateBrand } from '@/hooks/use-brands';
 import type { CreateProductInput, Product, ProductCondition, ProductStatus } from '@/types/api';
 
 const emptyProduct: CreateProductInput = {
   name: '',
   slug: '',
-  brand: '',
+  brandId: '',
   categoryId: '',
   price: '',
   condition: 'USED',
@@ -35,19 +36,24 @@ export function AdminProductForm({ id }: { id?: string }) {
   const deleteImage = useDeleteProductImage(id ?? '');
   const categoriesQuery = useCategories();
   const createCategory = useCreateCategory();
+  const brandsQuery = useBrands();
+  const createBrand = useCreateBrand();
+
   const product = productQuery.data;
   const [form, setForm] = useState<CreateProductInput>(emptyProduct);
   const [initialized, setInitialized] = useState(false);
   const [error, setError] = useState('');
   const [newCategory, setNewCategory] = useState('');
+  const [newBrand, setNewBrand] = useState('');
   const [isAddingCategory, setIsAddingCategory] = useState(false);
+  const [isAddingBrand, setIsAddingBrand] = useState(false);
 
   useEffect(() => {
     if (id && product && !initialized) {
       setForm({
         ...emptyProduct,
         ...product,
-        brand: product.brand ?? '',
+        brandId: product.brandId ?? '',
         categoryId: product.categoryId ?? '',
         description: product.description ?? '',
         specifications: product.specifications ?? {},
@@ -110,10 +116,64 @@ export function AdminProductForm({ id }: { id?: string }) {
         </label>
         <label>
           Бренд
-          <DrmInput
-            onChange={(event) => setField('brand', event.target.value)}
-            value={form.brand ?? ''}
-          />
+          <DrmSelect
+            required
+            disabled={brandsQuery.isPending || isAddingBrand}
+            onChange={(event) => {
+              if (event.target.value === '__new__') {
+                setIsAddingBrand(true);
+                return;
+              }
+              setField('brandId', event.target.value);
+            }}
+            value={isAddingBrand ? '__new__' : form.brandId}
+          >
+            <option value="">Выберите бренд</option>
+            {(brandsQuery.data ?? []).map((brand) => (
+              <option key={brand.id} value={brand.id}>
+                {brand.name}
+              </option>
+            ))}
+            <option value="__new__">+ Добавить свой бренд</option>
+          </DrmSelect>
+          {isAddingBrand && (
+            <div className="new-brand-control">
+              <DrmInput
+                autoFocus
+                maxLength={80}
+                onChange={(event) => setNewBrand(event.target.value)}
+                placeholder="Название нового бренда"
+                value={newBrand}
+              />
+              <div className="new-brand-actions">
+                <DrmButton
+                  className="button-outline-red"
+                  disabled={!newBrand.trim() || createBrand.isPending}
+                  onClick={() =>
+                    createBrand.mutate(newBrand.trim(), {
+                      onSuccess: (brand) => {
+                        setField('brandId', brand.id);
+                        setNewBrand('');
+                        setIsAddingBrand(false);
+                      },
+                    })
+                  }
+                  type="button"
+                >
+                  {createBrand.isPending ? 'Добавляем…' : 'Добавить бренд'}
+                </DrmButton>
+                <DrmButton
+                  className="button-link"
+                  onClick={() => setIsAddingBrand(false)}
+                  type="button"
+                >
+                  Отмена
+                </DrmButton>
+              </div>
+              {createBrand.isError && <small role="alert">{createBrand.error.message}</small>}
+            </div>
+          )}
+          {categoriesQuery.isError && <small role="alert">Не удалось загрузить категории.</small>}
         </label>
         <label>
           Категория

@@ -22,6 +22,12 @@ export type Category = {
   slug: string;
 };
 
+export type Brand = {
+  id: string;
+  name: string;
+  slug: string;
+};
+
 export type Paginated<T> = {
   data: T[];
   meta: { page: number; pageSize: number; total: number; totalPages: number };
@@ -43,7 +49,7 @@ export type AdminProductFilters = ProductFilters & {
 export type CreateProductInput = {
   name: string;
   slug: string;
-  brand?: string;
+  brandId: string;
   categoryId: string;
   price: string;
   condition: ProductCondition;

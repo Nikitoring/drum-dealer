@@ -22,7 +22,7 @@ export class ProductQueryDto extends PageQueryDto {
 export class CreateProductDto {
   @IsString() name!: string;
   @IsString() slug!: string;
-  @IsOptional() @IsString() brand?: string;
+  @IsString() brandId!: string;
   @IsString() categoryId!: string;
   @IsNumberString() price!: string;
   @IsEnum(ProductCondition) condition!: ProductCondition;

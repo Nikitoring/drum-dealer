@@ -9,6 +9,7 @@ import { BookingsModule } from './bookings/bookings.module';
 import { AdminModule } from './admin/admin.module';
 import { StorageModule } from './common/storage/storage.module';
 import { CategoriesModule } from './categories/categories.module';
+import { BrandsModule } from './brands/brands.module';
 
 @Module({
   imports: [
@@ -24,6 +25,7 @@ import { CategoriesModule } from './categories/categories.module';
     BookingsModule,
     AdminModule,
     CategoriesModule,
+    BrandsModule,
   ],
   controllers: [HealthController],
   providers: [],
