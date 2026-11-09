@@ -49,7 +49,7 @@ export type CreateProductInput = {
   condition: ProductCondition;
   status: ProductStatus;
   description?: string;
-  specifications?: Record<string, string>;
+  specifications?: string;
 };
 
 export type UpdateProductInput = Partial<CreateProductInput>;
