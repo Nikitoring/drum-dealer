@@ -51,7 +51,7 @@ Do not publish PostgreSQL, backend, or frontend ports. The production Compose fi
 
 ## First deployment
 
-Push the deployment files and workflow to the `main` branch. Add the GitHub secrets above. The first successful workflow run will pull images, apply migrations, and start the services.
+Push the deployment files and workflow to the `master` branch. Add the GitHub secrets above. The first successful workflow run will pull images, apply migrations, and start the services.
 
 Check status and logs:
 

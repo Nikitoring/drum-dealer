@@ -64,8 +64,23 @@ export function AdminProductForm({ id }: { id?: string }) {
   const submit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     setError('');
+    const payload = { ...form };
+    if (form.specifications && typeof form.specifications === 'string') {
+      try {
+        const jsonSpec = JSON.parse(form.specifications);
+        if (typeof jsonSpec !== 'object' || Array.isArray(jsonSpec)) {
+          setError('Характеристики должны быть корректным JSON-объектом.');
+          return;
+        }
+        payload.specifications = jsonSpec;
+      } catch {
+        setError('Характеристики должны быть корректным JSON.');
+        return;
+      }
+    }
+
     const mutation = id ? updateProduct : createProduct;
-    mutation.mutate(form, {
+    mutation.mutate(payload, {
       onSuccess: (saved) =>
         router.push(id ? '/admin/products' : `/admin/products/${saved.id}/edit`),
       onError: (reason) => setError(reason.message),
@@ -203,15 +218,13 @@ export function AdminProductForm({ id }: { id?: string }) {
         <label>
           Характеристики (JSON)
           <DrmTextarea
-            onChange={(event) => {
-              try {
-                setField('specifications', JSON.parse(event.target.value || '{}'));
-              } catch {
-                /* сохраняем предыдущее корректное значение */
-              }
-            }}
+            onChange={(event) => setField('specifications', event.target.value)}
             rows={5}
-            value={JSON.stringify(form.specifications ?? {}, null, 2)}
+            value={
+              typeof form.specifications === 'string'
+                ? form.specifications
+                : JSON.stringify(form.specifications, null, 2)
+            }
           />
         </label>
         {id && product && (
