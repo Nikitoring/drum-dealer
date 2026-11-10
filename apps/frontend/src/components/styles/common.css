@@ -55,7 +55,6 @@ h6 {
 
 .page-surface {
   width: min(100% - 48px, 1392px);
-  min-height: 600px;
   margin-inline: auto;
   overflow: hidden;
   border: 1px solid rgba(23, 23, 23, 0.2);
